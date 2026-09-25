@@ -1,0 +1,295 @@
+{% extends "base.html" %}
+
+{% block title %}اطلاعیه‌ها | PlantCare{% endblock %}
+
+{% block content %}
+
+<!-- Header -->
+<div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+    <div>
+        <h3 class="page-title mb-0">
+            <i class="bi bi-bell"></i> اطلاعیه‌ها
+        </h3>
+        <p class="page-subtitle">
+            {{ total_count }} اطلاعیه — {{ unread_count }} خوانده‌نشده
+        </p>
+    </div>
+
+    {% if unread_count %}
+        <button type="button"
+                class="btn btn-primary-glass"
+                id="markAllReadBtnPage">
+            <i class="bi bi-check2-all me-2"></i>
+            علامت‌گذاری همه به‌عنوان خوانده‌شده
+        </button>
+    {% endif %}
+</div>
+
+<!-- Filter Tabs -->
+<div class="d-flex flex-wrap gap-2 mb-4">
+    <a href="{% url 'notifications:list' %}"
+       class="notif-filter-tab {% if not current_status %}active{% endif %}">
+        <i class="bi bi-collection"></i>
+        همه ({{ total_count }})
+    </a>
+
+    <a href="?status=unread"
+       class="notif-filter-tab {% if current_status == 'unread' %}active{% endif %}">
+        <i class="bi bi-envelope"></i>
+        خوانده‌نشده ({{ unread_count }})
+    </a>
+
+    <a href="?status=read"
+       class="notif-filter-tab {% if current_status == 'read' %}active{% endif %}">
+        <i class="bi bi-envelope-open"></i>
+        خوانده‌شده ({{ read_count }})
+    </a>
+</div>
+
+<!-- Filter by Type -->
+<div class="glass-card mb-3">
+    <form method="get" class="row g-2 align-items-center">
+        {% if current_status %}
+            <input type="hidden" name="status" value="{{ current_status }}">
+        {% endif %}
+
+        <div class="col-md-6">
+            <select name="type" class="form-select">
+                <option value="">همه انواع</option>
+                {% for value, label in type_choices %}
+                    <option value="{{ value }}"
+                            {% if current_type == value %}selected{% endif %}>
+                        {{ label }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="col-md-3">
+            <button type="submit" class="btn btn-primary-glass w-100">
+                <i class="bi bi-funnel"></i> فیلتر
+            </button>
+        </div>
+
+        {% if current_type or current_status %}
+            <div class="col-md-3">
+                <a href="{% url 'notifications:list' %}" class="btn btn-glass w-100">
+                    <i class="bi bi-x-circle"></i> پاک کردن
+                </a>
+            </div>
+        {% endif %}
+    </form>
+</div>
+
+<!-- Notifications List -->
+{% if notifications %}
+    {% for notif in notifications %}
+        <div class="notif-card {% if not notif.is_read %}unread{% endif %}"
+             id="notif-{{ notif.pk }}">
+
+            <!-- Icon -->
+            <div class="notif-icon-large"
+                 style="border-color: {{ notif.priority_color }}40;">
+                <span>{{ notif.icon|default:'🔔' }}</span>
+            </div>
+
+            <!-- Body -->
+            <div class="notif-body">
+                <div class="notif-title">
+                    {{ notif.title }}
+                    {% if not notif.is_read %}
+                        <span class="badge-glass badge-status-healthy"
+                              style="font-size: 0.65rem;">
+                            جدید
+                        </span>
+                    {% endif %}
+                </div>
+
+                <div class="notif-message">{{ notif.message }}</div>
+
+                <div class="notif-meta">
+                    <span>
+                        <i class="bi bi-clock me-1"></i>
+                        {{ notif.created_at|date:"Y/m/d — H:i" }}
+                    </span>
+
+                    {% if notif.plant %}
+                        <a href="{% url 'plants:detail' notif.plant.pk %}"
+                           class="text-decoration-none text-glass">
+                            <i class="bi bi-flower1 me-1"></i>
+                            {{ notif.plant.name }}
+                        </a>
+                    {% endif %}
+
+                    <span class="badge-glass"
+                          style="font-size: 0.7rem;
+                                 background: {{ notif.priority_color }}30;
+                                 border-color: {{ notif.priority_color }}60;">
+                        {{ notif.get_priority_display }}
+                    </span>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="notif-actions">
+                {% if not notif.is_read %}
+                    <button type="button"
+                            class="btn btn-sm btn-glass mark-read-btn"
+                            data-id="{{ notif.pk }}"
+                            title="علامت‌گذاری خوانده‌شده">
+                        <i class="bi bi-check2"></i>
+                    </button>
+                {% endif %}
+
+                <button type="button"
+                        class="btn btn-sm btn-danger-glass delete-notif-btn"
+                        data-id="{{ notif.pk }}"
+                        data-confirm="این اطلاعیه حذف شود؟"
+                        title="حذف">
+                    <i class="bi bi-trash"></i>
+                </button>
+            </div>
+
+            {% if notif.url %}
+                <a href="{{ notif.url }}" class="stretched-link"></a>
+            {% endif %}
+        </div>
+    {% endfor %}
+
+    <!-- Pagination -->
+    {% if is_paginated %}
+        <nav class="mt-4">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link btn-glass"
+                           href="?page={{ page_obj.previous_page_number }}{% if current_status %}&status={{ current_status }}{% endif %}{% if current_type %}&type={{ current_type }}{% endif %}">
+                            <i class="bi bi-chevron-right"></i>
+                        </a>
+                    </li>
+                {% endif %}
+
+                <li class="page-item active">
+                    <span class="page-link btn-primary-glass">
+                        صفحه {{ page_obj.number }} از {{ page_obj.paginator.num_pages }}
+                    </span>
+                </li>
+
+                {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link btn-glass"
+                           href="?page={{ page_obj.next_page_number }}{% if current_status %}&status={{ current_status }}{% endif %}{% if current_type %}&type={{ current_type }}{% endif %}">
+                            <i class="bi bi-chevron-left"></i>
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    {% endif %}
+
+{% else %}
+    <div class="glass-card text-center py-5">
+        <i class="bi bi-bell-slash text-white" style="font-size: 4rem; opacity: 0.5;"></i>
+        <h5 class="text-white mt-3">اطلاعیه‌ای برای نمایش نیست</h5>
+        <p class="text-glass-muted">
+            {% if current_status or current_type %}
+                با این فیلترها نتیجه‌ای یافت نشد.
+            {% else %}
+                هر اتفاق مهمی برای گیاهان شما اینجا نمایش داده می‌شود.
+            {% endif %}
+        </p>
+        {% if current_status or current_type %}
+            <a href="{% url 'notifications:list' %}" class="btn btn-glass">
+                <i class="bi bi-x-circle me-2"></i> نمایش همه
+            </a>
+        {% endif %}
+    </div>
+{% endif %}
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+        function getCookie(name) {
+            let v = null;
+            if (document.cookie) {
+                for (const c of document.cookie.split(';')) {
+                    const t = c.trim();
+                    if (t.startsWith(name + '=')) {
+                        v = decodeURIComponent(t.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return v;
+        }
+
+        // علامت‌گذاری خوانده‌شده
+        document.querySelectorAll('.mark-read-btn').forEach(function (btn) {
+            btn.addEventListener('click', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                const id = this.dataset.id;
+                const card = document.getElementById('notif-' + id);
+
+                fetch(`/notifications/${id}/read/`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': getCookie('csrftoken'),
+                        'X-Requested-With': 'XMLHttpRequest',
+                    },
+                })
+                    .then(r => r.json())
+                    .then(() => {
+                        card?.classList.remove('unread');
+                        this.remove();
+                        // رفرش برای آپدیت شمارنده
+                        setTimeout(() => window.location.reload(), 300);
+                    });
+            });
+        });
+
+        // حذف
+        document.querySelectorAll('.delete-notif-btn').forEach(function (btn) {
+            btn.addEventListener('click', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                const id = this.dataset.id;
+                const card = document.getElementById('notif-' + id);
+                if (!confirm(this.dataset.confirm)) return;
+
+                fetch(`/notifications/${id}/delete/`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': getCookie('csrftoken'),
+                        'X-Requested-With': 'XMLHttpRequest',
+                    },
+                })
+                    .then(r => r.json())
+                    .then(() => {
+                        card?.remove();
+                        setTimeout(() => window.location.reload(), 200);
+                    });
+            });
+        });
+
+        // علامت‌گذاری همه
+        const markAllBtn = document.getElementById('markAllReadBtnPage');
+        if (markAllBtn) {
+            markAllBtn.addEventListener('click', function () {
+                fetch('/notifications/mark-all-read/', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': getCookie('csrftoken'),
+                        'X-Requested-With': 'XMLHttpRequest',
+                    },
+                })
+                    .then(r => r.json())
+                    .then(() => window.location.reload());
+            });
+        }
+    });
+</script>
+{% endblock %}

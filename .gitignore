@@ -1,0 +1,99 @@
+myenv/
+
+
+# ===== Python =====
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# ===== Virtual Environment =====
+venv/
+env/
+ENV/
+.venv/
+.env/
+virtualenv/
+*.venv
+
+# ===== Django =====
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+/media/
+/staticfiles/
+.DS_Store
+
+# ===== Environment Variables =====
+.env
+.env.*
+!.env.example
+*.env
+
+# ===== Secrets =====
+*.pem
+*.key
+secrets.json
+
+# ===== Django Migrations =====
+# اگر می‌خوای مایگریشن‌ها هم نادیده گرفته شن (معمولاً توصیه نمیشه)
+# */migrations/*.py
+# !*/migrations/__init__.py
+
+# ===== Testing =====
+.coverage
+.coverage.*
+.cache
+.pytest_cache/
+htmlcov/
+.tox/
+.nox/
+coverage.xml
+*.cover
+
+# ===== IDE / Editor =====
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.project
+.pydevproject
+.settings/
+
+# ===== OS =====
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ===== Node (اگر از frontend tools استفاده می‌کنی) =====
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ===== Celery =====
+celerybeat-schedule
+celerybeat.pid
+
+# ===== Docker =====
+# اگه از داکر استفاده می‌کنی و می‌خوای حجم‌ها رو نادیده بگیری
+# docker-volumes/

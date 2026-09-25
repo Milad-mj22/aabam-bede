@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}حذف {{ object.name }} | PlantCare{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="glass-card text-center py-5">
+
+            <div class="d-inline-flex align-items-center justify-content-center mb-4"
+                 style="width: 100px; height: 100px; border-radius: 50%;
+                        background: linear-gradient(135deg, #ef4444, #b91c1c);
+                        box-shadow: 0 12px 40px rgba(239,68,68,0.5);">
+                <i class="bi bi-exclamation-triangle text-white" style="font-size: 3rem;"></i>
+            </div>
+
+            <h4 class="text-white mb-3">حذف گیاه</h4>
+
+            <p class="text-glass mb-1">
+                آیا از حذف گیاه زیر مطمئن هستید؟
+            </p>
+
+            <h5 class="text-white mb-4">« {{ object.name }} »</h5>
+
+            <p class="text-glass-muted small mb-4">
+                این عمل قابل بازگشت نیست و تمام برنامه‌ها، تاریخچه و QR Codeهای مرتبط نیز حذف خواهند شد.
+            </p>
+
+            <form method="post" class="d-flex justify-content-center gap-2 flex-wrap">
+                {% csrf_token %}
+                <a href="{% url 'plants:detail' object.pk %}" class="btn btn-glass">
+                    <i class="bi bi-arrow-right me-2"></i> انصراف
+                </a>
+                <button type="submit" class="btn btn-danger-glass">
+                    <i class="bi bi-trash me-2"></i> بله، حذف شود
+                </button>
+            </form>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

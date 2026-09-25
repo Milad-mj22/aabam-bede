@@ -1,0 +1,666 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- SEO -->
+    <title>آبم بده | مراقبت هوشمند از گیاهان خانگی</title>
+    <meta name="description" content="آبم بده، اپلیکیشن رایگان مراقبت از گیاهان. یادآوری آبیاری، QR Code اختصاصی، تقویم مراقبت و تاریخچه کامل گیاهانت. گیاهت دیگه تشنه نمی‌مونه!">
+    <meta name="keywords" content="مراقبت گیاهان, آبم بده, یادآوری آبیاری, اپ گیاهان, نگهداری گیاه خانگی, QR گیاه, برنامه آبیاری">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="آبم بده | مراقبت هوشمند از گیاهان">
+    <meta property="og:description" content="گیاهت صدات می‌کنه! با آبم بده، هیچ‌وقت یادت نمی‌ره آب بدی.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="{% static 'img/og-image.png' %}">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="آبم بده | مراقبت هوشمند از گیاهان">
+    <meta name="twitter:description" content="گیاهت صدات می‌کنه!">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="{% static 'img/favicon.svg' %}">
+
+    <!-- Fonts -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css">
+
+    <!-- Bootstrap RTL -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.rtl.min.css">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
+    <!-- AOS Animation -->
+    <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
+
+    <!-- Landing CSS -->
+    <link rel="stylesheet" href="{% static 'css/landing.css' %}">
+
+
+
+    <link rel="canonical" href="https://aabam-bede.ir/">
+
+    <meta property="og:url" content="https://aabam-bede.ir/">
+    <meta property="og:site_name" content="آبم بده">
+
+    <meta name="twitter:url" content="https://aabam-bede.ir/">
+
+
+</head>
+<body class="landing-body">
+
+<!-- ============================================
+     Navbar
+     ============================================ -->
+<nav class="landing-nav">
+    <div class="container">
+        <a href="{% url 'core:landing' %}" class="landing-brand">
+            <span class="brand-icon">💧🌱</span>
+            <span class="brand-text">آبم بده</span>
+        </a>
+
+        <button class="landing-nav-toggle" id="navToggle" aria-label="منو">
+            <i class="bi bi-list"></i>
+        </button>
+
+        <ul class="landing-nav-links" id="navLinks">
+            <li><a href="#features">امکانات</a></li>
+            <li><a href="#how">چطور کار می‌کنه؟</a></li>
+            <li><a href="#faq">سوالات</a></li>
+            <li class="nav-cta-mobile">
+                <a href="{% url 'accounts:login' %}" class="btn-login">ورود</a>
+                <a href="{% url 'accounts:register' %}" class="btn-signup">ثبت‌نام رایگان</a>
+            </li>
+        </ul>
+
+        <div class="landing-nav-actions">
+            <a href="{% url 'accounts:login' %}" class="btn-login">ورود</a>
+            <a href="{% url 'accounts:register' %}" class="btn-signup">
+                <i class="bi bi-person-plus"></i>
+                ثبت‌نام رایگان
+            </a>
+        </div>
+    </div>
+</nav>
+
+<!-- ============================================
+     Hero
+     ============================================ -->
+<section class="hero-section">
+    <div class="hero-bg-decoration"></div>
+    <div class="container">
+        <div class="row align-items-center g-5">
+
+            <div class="col-lg-6" data-aos="fade-left">
+                <div class="hero-badge">
+                    <span class="dot"></span>
+                    اپلیکیشن رایگان مراقبت از گیاهان
+                </div>
+
+                <h1 class="hero-title">
+                    گیاهت
+                    <span class="highlight">صدات</span>
+                    می‌کنه!
+                </h1>
+
+                <p class="hero-subtitle">
+                    با <strong>آبم بده</strong> دیگه هیچ‌وقت یادت نمی‌ره به گیاهات آب بدی.
+                    یادآوری هوشمند، QR اختصاصی، تقویم مراقبت و تاریخچه کامل —
+                    همه‌چیز در یک اپ ساده و بامزه. 🌱💧
+                </p>
+
+                <div class="hero-cta">
+                    <a href="{% url 'accounts:register' %}" class="btn-hero-primary">
+                        <i class="bi bi-rocket-takeoff"></i>
+                        همین حالا شروع کن — رایگان
+                    </a>
+                    <a href="#how" class="btn-hero-secondary">
+                        <i class="bi bi-play-circle"></i>
+                        چطور کار می‌کنه؟
+                    </a>
+                </div>
+
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <div class="stat-value">رایگان</div>
+                        <div class="stat-label">برای همیشه</div>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat-item">
+                        <div class="stat-value">∞</div>
+                        <div class="stat-label">گیاه نامحدود</div>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat-item">
+                        <div class="stat-value">QR</div>
+                        <div class="stat-label">اختصاصی هر گیاه</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6" data-aos="fade-right">
+                <div class="hero-visual">
+                    <!-- Phone mockup -->
+                    <div class="phone-mockup">
+                        <div class="phone-notch"></div>
+                        <div class="phone-screen">
+                            <div class="mock-header">
+                                <span>سلام علی 🌱</span>
+                                <i class="bi bi-bell"></i>
+                            </div>
+                            <div class="mock-card critical">
+                                <div class="mock-icon">💧</div>
+                                <div class="mock-body">
+                                    <div class="mock-title">Monstera تشنه‌ست!</div>
+                                    <div class="mock-text">امروز نوبت آبیاریه</div>
+                                </div>
+                            </div>
+                            <div class="mock-card">
+                                <div class="mock-icon">🌱</div>
+                                <div class="mock-body">
+                                    <div class="mock-title">کوددهی کاکتوس</div>
+                                    <div class="mock-text">۲ روز دیگه</div>
+                                </div>
+                            </div>
+                            <div class="mock-card success">
+                                <div class="mock-icon">✅</div>
+                                <div class="mock-body">
+                                    <div class="mock-title">آبیاری ثبت شد</div>
+                                    <div class="mock-text">دیروز - ۱۸:۳۰</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Floating elements -->
+                    <div class="floating-element float-1">💧</div>
+                    <div class="floating-element float-2">🌿</div>
+                    <div class="floating-element float-3">🌸</div>
+                    <div class="floating-element float-4">🪴</div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- ============================================
+     Problem Section
+     ============================================ -->
+<section class="problem-section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 text-center" data-aos="fade-up">
+                <div class="problem-emoji">🥺</div>
+                <h2 class="problem-title">
+                    این صحنه برات آشناست؟
+                </h2>
+                <p class="problem-text">
+                    یهو یادت میاد یه گلی تو گوشه اتاق داری که
+                    <strong>چند روزه آب نداده</strong>...
+                    برگاش افتاده، رنگش پریده.
+                    <br><br>
+                    <strong>آبم بده</strong> این مشکل رو برای همیشه حل می‌کنه.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================
+     Features
+     ============================================ -->
+<section class="features-section" id="features">
+    <div class="container">
+        <div class="section-header" data-aos="fade-up">
+            <span class="section-badge">امکانات</span>
+            <h2 class="section-title">همه‌چیز برای مراقبت از گیاهانت</h2>
+            <p class="section-subtitle">
+                ابزارهایی ساده اما قدرتمند که نگهداری گیاهان رو برات لذت‌بخش می‌کنه
+            </p>
+        </div>
+
+        <div class="row g-4">
+            {% for feature in features %}
+                <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|add:'50' }}">
+                    <div class="feature-card" style="--accent: {{ feature.color }};">
+                        <div class="feature-icon">
+                            <i class="bi {{ feature.icon }}"></i>
+                        </div>
+                        <h3 class="feature-title">{{ feature.title }}</h3>
+                        <p class="feature-description">{{ feature.description }}</p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- ============================================
+     How It Works
+     ============================================ -->
+<section class="how-section" id="how">
+    <div class="container">
+        <div class="section-header" data-aos="fade-up">
+            <span class="section-badge">۴ مرحله ساده</span>
+            <h2 class="section-title">چطور آبم بده کار می‌کنه؟</h2>
+            <p class="section-subtitle">
+                از ثبت‌نام تا مراقبت از اولین گیاهت، کمتر از ۲ دقیقه!
+            </p>
+        </div>
+
+        <div class="steps-container">
+            <div class="steps-line"></div>
+
+            <div class="row g-4">
+                {% for step in steps %}
+                    <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|add:'100' }}">
+                        <div class="step-card">
+                            <div class="step-number">{{ step.number }}</div>
+                            <div class="step-icon">
+                                <i class="bi {{ step.icon }}"></i>
+                            </div>
+                            <h4 class="step-title">{{ step.title }}</h4>
+                            <p class="step-description">{{ step.description }}</p>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================
+     Screenshots
+     ============================================ -->
+<section class="screenshots-section">
+    <div class="container">
+        <div class="section-header" data-aos="fade-up">
+            <span class="section-badge">نگاهی به اپ</span>
+            <h2 class="section-title">رابط کاربری زیبا و ساده</h2>
+            <p class="section-subtitle">
+                طراحی شده تا بدون آموزش، بتونی ازش استفاده کنی
+            </p>
+        </div>
+
+        <div class="screenshots-grid" data-aos="fade-up">
+            <div class="screenshot-item">
+                <div class="screenshot-badge">داشبورد</div>
+                <div class="screenshot-mock">
+                    <div class="mock-screen mock-dashboard">
+                        <div class="mock-stat-row">
+                            <div class="mock-stat">
+                                <div class="mock-stat-icon">🌱</div>
+                                <div class="mock-stat-value">۱۲</div>
+                            </div>
+                            <div class="mock-stat">
+                                <div class="mock-stat-icon">💧</div>
+                                <div class="mock-stat-value">۳</div>
+                            </div>
+                            <div class="mock-stat">
+                                <div class="mock-stat-icon">✅</div>
+                                <div class="mock-stat-value">۸</div>
+                            </div>
+                        </div>
+                        <div class="mock-chart"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="screenshot-item">
+                <div class="screenshot-badge">گیاهان</div>
+                <div class="screenshot-mock">
+                    <div class="mock-screen mock-plants">
+                        <div class="mock-plant-grid">
+                            <div class="mock-plant">🌸</div>
+                            <div class="mock-plant">🌿</div>
+                            <div class="mock-plant">🪴</div>
+                            <div class="mock-plant">🌵</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="screenshot-item">
+                <div class="screenshot-badge">QR Code</div>
+                <div class="screenshot-mock">
+                    <div class="mock-screen mock-qr">
+                        <div class="mock-qr-code">📱</div>
+                        <div class="mock-qr-text">اسکن کن!</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================
+     Testimonials
+     ============================================ -->
+<section class="testimonials-section">
+    <div class="container">
+        <div class="section-header" data-aos="fade-up">
+            <span class="section-badge">نظر کاربران</span>
+            <h2 class="section-title">کاربران چی می‌گن؟</h2>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-4" data-aos="fade-up">
+                <div class="testimonial-card">
+                    <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
+                    <p class="testimonial-text">
+                        «قبلاً همیشه گیاهام می‌مردن چون یادم می‌رفت آب بدم.
+                        الان با آبم بده هیچ‌وقت یادم نمی‌ره!»
+                    </p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">👩</div>
+                        <div>
+                            <div class="author-name">سارا م.</div>
+                            <div class="author-role">علاقه‌مند به گیاهان</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
+                <div class="testimonial-card featured">
+                    <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
+                    <p class="testimonial-text">
+                        «۲۳ تا گیاه دارم. قبلاً با کاغذ و تقویم مدیریت می‌کردم.
+                        الان همه‌چیز دیجیتال شده و QR Codeها معجزه می‌کنن!»
+                    </p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">👨</div>
+                        <div>
+                            <div class="author-name">رضا ک.</div>
+                            <div class="author-role">کلکسیونر کاکتوس</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
+                <div class="testimonial-card">
+                    <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
+                    <p class="testimonial-text">
+                        «دفتر کارمون پر از گیاهه. با آبم بده همه کارمندها
+                        می‌تونن مسئولیت آبیاری رو ببینن. عالیه!»
+                    </p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">👩‍💼</div>
+                        <div>
+                            <div class="author-name">مریم ط.</div>
+                            <div class="author-role">مدیر اداری</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================
+     Pricing
+     ============================================ -->
+<section class="pricing-section">
+    <div class="container">
+        <div class="section-header" data-aos="fade-up">
+            <span class="section-badge">تعرفه</span>
+            <h2 class="section-title">رایگان برای همیشه</h2>
+            <p class="section-subtitle">
+                بدون کارت اعتباری، بدون محدودیت زمانی
+            </p>
+        </div>
+
+        <div class="row justify-content-center g-4">
+            <div class="col-md-5" data-aos="fade-up">
+                <div class="pricing-card">
+                    <div class="pricing-header">
+                        <h3>رایگان</h3>
+                        <div class="pricing-price">
+                            <span class="price-value">۰</span>
+                            <span class="price-unit">تومان</span>
+                        </div>
+                        <p class="pricing-desc">برای همه، همیشه</p>
+                    </div>
+
+                    <ul class="pricing-features">
+                        <li><i class="bi bi-check-circle-fill"></i> گیاه نامحدود</li>
+                        <li><i class="bi bi-check-circle-fill"></i> یادآوری آبیاری</li>
+                        <li><i class="bi bi-check-circle-fill"></i> QR Code اختصاصی</li>
+                        <li><i class="bi bi-check-circle-fill"></i> تقویم مراقبت</li>
+                        <li><i class="bi bi-check-circle-fill"></i> تاریخچه کامل</li>
+                        <li><i class="bi bi-check-circle-fill"></i> آلبوم تصاویر</li>
+                    </ul>
+
+                    <a href="{% url 'accounts:register' %}" class="btn-pricing">
+                        شروع کن — رایگان
+                    </a>
+                </div>
+            </div>
+
+            <div class="col-md-5" data-aos="fade-up" data-aos-delay="100">
+                <div class="pricing-card pro">
+                    <div class="pricing-badge">به‌زودی</div>
+                    <div class="pricing-header">
+                        <h3>حرفه‌ای</h3>
+                        <div class="pricing-price">
+                            <span class="price-value">؟</span>
+                            <span class="price-unit">تومان / ماه</span>
+                        </div>
+                        <p class="pricing-desc">برای عاشقان جدی گیاهان</p>
+                    </div>
+
+                    <ul class="pricing-features">
+                        <li><i class="bi bi-check-circle-fill"></i> همه امکانات رایگان</li>
+                        <li><i class="bi bi-stars"></i> شناسایی گیاه با AI</li>
+                        <li><i class="bi bi-stars"></i> تشخیص بیماری از عکس</li>
+                        <li><i class="bi bi-stars"></i> پیشنهاد برنامه هوشمند</li>
+                        <li><i class="bi bi-stars"></i> گزارش‌های پیشرفته</li>
+                        <li><i class="bi bi-stars"></i> پشتیبانی اولویت‌دار</li>
+                    </ul>
+
+                    <a href="#" class="btn-pricing disabled">
+                        به‌زودی...
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================
+     FAQ
+     ============================================ -->
+<section class="faq-section" id="faq">
+    <div class="container">
+        <div class="section-header" data-aos="fade-up">
+            <span class="section-badge">سوالات متداول</span>
+            <h2 class="section-title">چی می‌خوای بدونی؟</h2>
+        </div>
+
+        <div class="faq-container" data-aos="fade-up">
+            {% for faq in faqs %}
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        <span>{{ faq.question }}</span>
+                        <i class="bi bi-plus-lg"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>{{ faq.answer }}</p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- ============================================
+     Final CTA
+     ============================================ -->
+<section class="final-cta-section">
+    <div class="container">
+        <div class="final-cta-card" data-aos="zoom-in">
+            <div class="cta-decorations">
+                <span class="deco deco-1">💧</span>
+                <span class="deco deco-2">🌱</span>
+                <span class="deco deco-3">🌸</span>
+                <span class="deco deco-4">🪴</span>
+                <span class="deco deco-5">💚</span>
+            </div>
+
+            <h2 class="cta-title">
+                آماده‌ای گیاهت دیگه تشنه نمونه؟
+            </h2>
+
+            <p class="cta-subtitle">
+                همین حالا ثبت‌نام کن، در ۳۰ ثانیه گیاهت رو اضافه کن،
+                بذار آبم بده بهت یادآوری کنه. 💧
+            </p>
+
+            <a href="{% url 'accounts:register' %}" class="btn-cta-big">
+                <i class="bi bi-rocket-takeoff"></i>
+                شروع رایگان — همین حالا
+            </a>
+
+            <p class="cta-note">
+                <i class="bi bi-shield-check"></i>
+                بدون کارت اعتباری · بدون محدودیت · همیشه رایگان
+            </p>
+            <!-- اضافه کن زیر CTA -->
+            <div style="text-align: center; margin-top: 1.5rem; color: rgba(255,255,255,0.9);">
+                <i class="bi bi-globe"></i>
+                <strong>aabam-bede.ir</strong>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================
+     Footer
+     ============================================ -->
+<footer class="landing-footer">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="footer-brand">
+                    <span class="brand-icon">💧🌱</span>
+                    <span class="brand-text">آبم بده</span>
+                </div>
+                <p class="footer-desc">
+                    سامانه هوشمند مراقبت از گیاهان.
+                    گیاهت صدات می‌کنه، ما بهت خبر می‌دیم! 💧
+                </p>
+            </div>
+
+            <div class="col-md-2 col-6">
+                <h5 class="footer-title">اپلیکیشن</h5>
+                <ul class="footer-links">
+                    <li><a href="#features">امکانات</a></li>
+                    <li><a href="#how">چطور کار می‌کنه</a></li>
+                    <li><a href="#faq">سوالات</a></li>
+                </ul>
+            </div>
+
+            <div class="col-md-2 col-6">
+                <h5 class="footer-title">حساب</h5>
+                <ul class="footer-links">
+                    <li><a href="{% url 'accounts:login' %}">ورود</a></li>
+                    <li><a href="{% url 'accounts:register' %}">ثبت‌نام</a></li>
+                </ul>
+            </div>
+
+<div class="col-md-4">
+    <h5 class="footer-title">با ما در ارتباط باش</h5>
+
+    <!-- اطلاعات تماس -->
+    <ul class="footer-contact">
+        <li>
+            <i class="bi bi-telephone-fill"></i>
+            <a href="tel:+989135689040" dir="ltr">09135689040</a>
+        </li>
+        <li>
+            <i class="bi bi-envelope-fill"></i>
+            <a href="mailto:info@aabam-bede.ir" dir="ltr">info@aabam-bede.ir</a>
+        </li>
+    </ul>
+
+    <!-- شبکه‌های اجتماعی -->
+    <div class="footer-social">
+        <a href="#" aria-label="اینستاگرام"><i class="bi bi-instagram"></i></a>
+        <a href="#" aria-label="تلگرام"><i class="bi bi-telegram"></i></a>
+        <a href="#" aria-label="واتساپ"><i class="bi bi-whatsapp"></i></a>
+    </div>
+</div>
+        </div>
+
+        <div class="footer-bottom">
+            <div>© {% now "Y" %} آبم بده — همه حقوق محفوظه</div>
+            <div>
+                <i class="bi bi-globe me-1"></i>
+                <a href="https://aabam-bede.ir" style="color: inherit;">aabam-bede.ir</a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- ============================================
+     Scripts
+     ============================================ -->
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+    // AOS Init
+    AOS.init({
+        duration: 700,
+        once: true,
+        offset: 100,
+    });
+
+    // Mobile Nav Toggle
+    document.getElementById('navToggle')?.addEventListener('click', function () {
+        document.getElementById('navLinks')?.classList.toggle('open');
+    });
+
+    // FAQ Toggle
+    function toggleFaq(btn) {
+        const item = btn.parentElement;
+        const isOpen = item.classList.contains('open');
+
+        // بستن بقیه
+        document.querySelectorAll('.faq-item').forEach(function (el) {
+            el.classList.remove('open');
+        });
+
+        if (!isOpen) {
+            item.classList.add('open');
+        }
+    }
+
+    // Smooth scroll
+    document.querySelectorAll('a[href^="#"]').forEach(function (anchor) {
+        anchor.addEventListener('click', function (e) {
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                e.preventDefault();
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                document.getElementById('navLinks')?.classList.remove('open');
+            }
+        });
+    });
+
+    // Navbar background on scroll
+    window.addEventListener('scroll', function () {
+        const nav = document.querySelector('.landing-nav');
+        if (window.scrollY > 50) {
+            nav?.classList.add('scrolled');
+        } else {
+            nav?.classList.remove('scrolled');
+        }
+    });
+</script>
+
+</body>
+</html>

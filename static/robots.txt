@@ -1,0 +1,14 @@
+User-agent: *
+Allow: /
+
+# Disallow private areas
+Disallow: /admin/
+Disallow: /dashboard/
+Disallow: /accounts/
+Disallow: /plants/
+Disallow: /care/
+Disallow: /notifications/
+Disallow: /qr/generate/
+
+# Sitemap
+Sitemap: https://aabam-bede.ir/sitemap.xml

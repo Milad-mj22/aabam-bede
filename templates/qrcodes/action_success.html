@@ -1,0 +1,103 @@
+{% extends "qrcodes/_qr_base.html" %}
+
+{% block title %}ثبت موفق | PlantCare{% endblock %}
+
+{% block content %}
+
+<div class="qr-success-card">
+
+    <!-- آیکون موفقیت -->
+    <div class="qr-success-icon">
+        <i class="bi bi-check-lg"></i>
+    </div>
+
+    <h2 class="qr-success-title">
+        {{ care_type.icon }} {{ care_type.name }} ثبت شد!
+    </h2>
+
+    <p class="qr-success-subtitle">
+        فعالیت شما با موفقیت در تاریخچه گیاه ذخیره شد.
+    </p>
+
+    <!-- کارت گیاه -->
+    <div class="qr-success-plant">
+        {% if plant.image %}
+            <img src="{{ plant.image.url }}" alt="{{ plant.name }}">
+        {% else %}
+            <div class="placeholder">
+                <i class="bi bi-flower1"></i>
+            </div>
+        {% endif %}
+
+        <div class="info">
+            <div class="name">{{ plant.name }}</div>
+            <div class="meta">
+                <i class="bi bi-clock me-1"></i>
+                {{ log.performed_at|date:"Y/m/d — H:i" }}
+            </div>
+        </div>
+    </div>
+
+    <!-- جزئیات بیشتر -->
+    <div class="qr-info-grid mb-0">
+        <div class="qr-info-card">
+            <span class="icon">📊</span>
+            <div class="label">کل فعالیت‌های امروز</div>
+            <div class="value">
+                {{ plant.care_logs.all|length }}
+            </div>
+        </div>
+        <div class="qr-info-card">
+            <span class="icon">🏷️</span>
+            <div class="label">نوع ثبت</div>
+            <div class="value">QR</div>
+        </div>
+        <div class="qr-info-card">
+            <span class="icon">✅</span>
+            <div class="label">وضعیت گیاه</div>
+            <div class="value">{{ plant.get_status_display }}</div>
+        </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="qr-actions">
+        <a href="{% url 'qrcodes:public_plant' qr.token %}" class="btn btn-glass" hidden></a>
+        <a href="{% url 'core:dashboard' %}" class="btn btn-primary-glass">
+            <i class="bi bi-house me-2"></i> داشبورد
+        </a>
+        <button onclick="window.close()" class="btn btn-glass">
+            <i class="bi bi-x-lg me-2"></i> بستن
+        </button>
+    </div>
+
+    <!-- Progress bar auto-close -->
+    <div class="mt-4">
+        <small class="text-glass-muted d-block mb-2">
+            این صفحه تا ۵ ثانیه دیگر بسته می‌شود...
+        </small>
+        <div class="progress" style="height: 4px; background: rgba(255,255,255,0.1);">
+            <div class="progress-bar"
+                 style="width: 100%; background: linear-gradient(90deg, #10b981, #06b6d4);
+                        animation: shrinkBar 5s linear forwards;"></div>
+        </div>
+    </div>
+
+</div>
+
+<style>
+@keyframes shrinkBar {
+    from { width: 100%; }
+    to { width: 0%; }
+}
+</style>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // تلاش برای بستن تب (اگر باز شده از QR روی موبایل)
+    setTimeout(function () {
+        window.close();
+    }, 5000);
+</script>
+{% endblock %}

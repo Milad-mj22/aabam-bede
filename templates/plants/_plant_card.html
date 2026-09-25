@@ -1,0 +1,85 @@
+{% load static %}
+<div class="plant-card animate-fade-up">
+
+    <!-- تصویر -->
+    <a href="{% url 'plants:detail' plant.pk %}" class="d-block text-decoration-none">
+        {% if plant.image %}
+            <div class="plant-image">
+                <img src="{{ plant.image.url }}" alt="{{ plant.name }}">
+            </div>
+        {% else %}
+            <div class="plant-placeholder">
+                <i class="bi bi-flower1"></i>
+            </div>
+        {% endif %}
+    </a>
+
+    <!-- بدنه -->
+    <div class="plant-body">
+        <div class="d-flex justify-content-between align-items-start mb-2">
+            <a href="{% url 'plants:detail' plant.pk %}"
+               class="plant-name text-decoration-none">
+                {{ plant.name }}
+            </a>
+
+            <div class="dropdown">
+                <button class="btn btn-sm btn-glass" data-bs-toggle="dropdown">
+                    <i class="bi bi-three-dots-vertical"></i>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li>
+                        <a class="dropdown-item" href="{% url 'plants:detail' plant.pk %}">
+                            <i class="bi bi-eye"></i> مشاهده
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="{% url 'plants:update' plant.pk %}">
+                            <i class="bi bi-pencil"></i> ویرایش
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="{% url 'care:log_create' plant.pk %}">
+                            <i class="bi bi-plus-circle"></i> ثبت فعالیت
+                        </a>
+                    </li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li>
+                        <a class="dropdown-item text-danger"
+                           href="{% url 'plants:delete' plant.pk %}">
+                            <i class="bi bi-trash"></i> حذف
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        {% if plant.scientific_name %}
+            <div class="plant-scientific">{{ plant.scientific_name }}</div>
+        {% endif %}
+
+        <div class="d-flex flex-wrap gap-2 mb-2">
+            <span class="badge-glass
+                {% if plant.status == 'healthy' %}badge-status-healthy{% endif %}
+                {% if plant.status == 'needs_attention' %}badge-status-warning{% endif %}
+                {% if plant.status == 'sick' %}badge-status-danger{% endif %}">
+                <i class="bi bi-circle-fill" style="font-size: 0.5rem;"></i>
+                {{ plant.get_status_display }}
+            </span>
+
+            {% if plant.location %}
+                <span class="badge-glass">
+                    <i class="bi bi-geo-alt"></i> {{ plant.location }}
+                </span>
+            {% endif %}
+        </div>
+
+        <div class="plant-actions">
+            <a href="{% url 'plants:detail' plant.pk %}" class="btn btn-sm btn-primary-glass flex-fill">
+                <i class="bi bi-eye me-1"></i> مشاهده
+            </a>
+            <a href="{% url 'care:log_create' plant.pk %}" class="btn btn-sm btn-glass">
+                <i class="bi bi-plus-lg"></i>
+            </a>
+        </div>
+    </div>
+</div>

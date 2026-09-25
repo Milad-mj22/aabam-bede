@@ -1,0 +1,49 @@
+<li class="nav-item dropdown notification-dropdown">
+    <a class="nav-link position-relative"
+       href="#"
+       id="notifDropdown"
+       role="button"
+       data-bs-toggle="dropdown"
+       aria-expanded="false">
+
+        <i class="bi bi-bell fs-5"></i>
+
+        <!-- شمارنده -->
+        <span class="notification-badge"
+              id="notifBadge"
+              style="display: none;">0</span>
+    </a>
+
+    <div class="dropdown-menu dropdown-menu-end notification-menu"
+         aria-labelledby="notifDropdown">
+
+        <!-- Header -->
+        <div class="notification-header">
+            <div class="d-flex justify-content-between align-items-center">
+                <strong>اطلاعیه‌ها</strong>
+                <button type="button"
+                        class="btn btn-sm btn-link text-decoration-none p-0 mark-all-read-btn"
+                        id="markAllReadBtn">
+                    <small>همه را خواندم</small>
+                </button>
+            </div>
+        </div>
+
+        <!-- Body -->
+        <div class="notification-body" id="notifList">
+            <div class="text-center py-4">
+                <div class="spinner-border spinner-border-sm text-light" role="status"></div>
+                <div class="text-glass-muted small mt-2">در حال بارگذاری...</div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="notification-footer">
+            <a href="{% url 'notifications:list' %}"
+               class="text-decoration-none d-block text-center">
+                <small>مشاهده همه اطلاعیه‌ها</small>
+            </a>
+        </div>
+
+    </div>
+</li>

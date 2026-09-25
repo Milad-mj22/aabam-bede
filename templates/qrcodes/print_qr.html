@@ -1,0 +1,142 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>چاپ QR — {{ plant.name }}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            background: #f8fafc;
+            padding: 20px;
+        }
+
+        .print-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .qr-card {
+            background: #fff;
+            border: 2px solid #10b981;
+            border-radius: 16px;
+            padding: 15px;
+            text-align: center;
+            page-break-inside: avoid;
+        }
+
+        .qr-card img {
+            width: 100%;
+            max-width: 220px;
+            height: auto;
+        }
+
+        .qr-card .plant-name {
+            font-weight: 800;
+            color: #0f172a;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+
+        .qr-card .scientific {
+            color: #64748b;
+            font-size: 0.85rem;
+            font-style: italic;
+            margin-bottom: 10px;
+        }
+
+        .qr-card .hint {
+            color: #10b981;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-top: 8px;
+        }
+
+        .qr-card .qr-type {
+            display: inline-block;
+            background: #10b981;
+            color: #fff;
+            padding: 3px 10px;
+            border-radius: 999px;
+            font-size: 0.72rem;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        .qr-card .qr-type.action {
+            background: #0ea5e9;
+        }
+
+        @media print {
+            body { background: #fff; padding: 0; }
+            .qr-card { border-color: #333; }
+        }
+
+        .no-print {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .no-print button {
+            background: #10b981;
+            color: #fff;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 0.95rem;
+        }
+
+        .no-print button:hover {
+            background: #059669;
+        }
+    </style>
+</head>
+<body>
+
+<div class="no-print">
+    <button onclick="window.print()">
+        🖨️ چاپ QR Codeها
+    </button>
+</div>
+
+<div class="print-container">
+    {% for qr in qr_codes %}
+        <div class="qr-card">
+            <div class="qr-type {% if qr.qr_type == 'action' %}action{% endif %}">
+                {% if qr.qr_type == 'plant' %}
+                    🌱 شناسنامه گیاه
+                {% else %}
+                    ⚡ ثبت سریع: {{ qr.action_type|title }}
+                {% endif %}
+            </div>
+
+            {% if qr.image %}
+                <img src="{{ qr.image.url }}" alt="QR">
+            {% endif %}
+
+            <div class="plant-name">{{ plant.name }}</div>
+            {% if plant.scientific_name %}
+                <div class="scientific">{{ plant.scientific_name }}</div>
+            {% endif %}
+
+            <div class="hint">
+                {% if qr.qr_type == 'plant' %}
+                    اسکن کنید تا اطلاعات گیاه را ببینید
+                {% else %}
+                    اسکن کنید تا {{ qr.action_type }} ثبت شود
+                {% endif %}
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+</body>
+</html>

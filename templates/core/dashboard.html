@@ -1,0 +1,560 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}داشبورد | PlantCare{% endblock %}
+
+{% block extra_css %}
+<style>
+    .welcome-banner {
+        background: linear-gradient(135deg,
+            rgba(16, 185, 129, 0.25),
+            rgba(6, 182, 212, 0.25));
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        border-radius: 24px;
+        padding: 1.75rem 2rem;
+        margin-bottom: 1.5rem;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .welcome-banner::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -10%;
+        width: 300px;
+        height: 300px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(16, 185, 129, 0.4), transparent 70%);
+        filter: blur(30px);
+        pointer-events: none;
+    }
+
+    .welcome-banner h2 {
+        color: #fff;
+        font-weight: 800;
+        margin: 0 0 0.35rem;
+        font-size: 1.65rem;
+        text-shadow: 0 2px 15px rgba(0, 0, 0, 0.2);
+        position: relative;
+        z-index: 1;
+    }
+
+    .welcome-banner p {
+        color: rgba(255, 255, 255, 0.85);
+        margin: 0;
+        font-size: 0.95rem;
+        position: relative;
+        z-index: 1;
+    }
+
+    .welcome-banner .quick-add {
+        position: relative;
+        z-index: 1;
+        margin-top: 1rem;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    /* ===================== Stats ===================== */
+
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.85rem;
+        margin-bottom: 1.5rem;
+    }
+
+    @media (min-width: 768px) {
+        .stats-grid {
+            grid-template-columns: repeat(4, 1fr);
+        }
+    }
+
+    .stat-box {
+        background: rgba(255, 255, 255, 0.12);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.22);
+        border-radius: 20px;
+        padding: 1.1rem;
+        transition: all 0.25s ease;
+        position: relative;
+        overflow: hidden;
+        text-decoration: none;
+        display: block;
+    }
+
+    .stat-box:hover {
+        transform: translateY(-3px);
+        background: rgba(255, 255, 255, 0.2);
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+    }
+
+    .stat-box::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 3px;
+        background: var(--accent, #10b981);
+    }
+
+    .stat-box .icon-wrap {
+        width: 46px;
+        height: 46px;
+        border-radius: 14px;
+        background: rgba(255, 255, 255, 0.15);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.4rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .stat-box .label {
+        color: rgba(255, 255, 255, 0.75);
+        font-size: 0.78rem;
+        font-weight: 500;
+        margin-bottom: 0.25rem;
+    }
+
+    .stat-box .value {
+        color: #fff;
+        font-size: 1.75rem;
+        font-weight: 800;
+        line-height: 1;
+        font-variant-numeric: tabular-nums;
+    }
+
+    .stat-box .trend {
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 0.72rem;
+        margin-top: 0.4rem;
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+    }
+
+    /* ===================== Today Tasks ===================== */
+
+    .task-item {
+        display: flex;
+        align-items: center;
+        gap: 0.85rem;
+        padding: 0.85rem 0.75rem;
+        border-radius: 14px;
+        transition: all 0.2s ease;
+        border: 1px solid transparent;
+        background: rgba(255, 255, 255, 0.06);
+        margin-bottom: 0.55rem;
+        text-decoration: none;
+    }
+
+    .task-item:hover {
+        background: rgba(255, 255, 255, 0.12);
+        border-color: rgba(255, 255, 255, 0.2);
+        transform: translateX(-3px);
+    }
+
+    .task-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.3rem;
+        flex-shrink: 0;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .task-body {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .task-title {
+        color: #fff;
+        font-weight: 600;
+        font-size: 0.9rem;
+        margin-bottom: 0.15rem;
+    }
+
+    .task-meta {
+        color: rgba(255, 255, 255, 0.65);
+        font-size: 0.75rem;
+    }
+
+    .task-time {
+        color: rgba(255, 255, 255, 0.75);
+        font-size: 0.8rem;
+        font-weight: 600;
+        text-align: left;
+        flex-shrink: 0;
+    }
+
+    /* ===================== Chart containers ===================== */
+
+    .chart-container {
+        position: relative;
+        height: 280px;
+    }
+
+    @media (max-width: 768px) {
+        .chart-container {
+            height: 220px;
+        }
+    }
+
+    /* ===================== Empty states ===================== */
+
+    .empty-state {
+        text-align: center;
+        padding: 2.5rem 1rem;
+        color: rgba(255, 255, 255, 0.6);
+    }
+
+    .empty-state i {
+        font-size: 3rem;
+        opacity: 0.5;
+        display: block;
+        margin-bottom: 0.75rem;
+    }
+
+    /* ===================== Overdue alert ===================== */
+
+    .overdue-banner {
+        background: linear-gradient(135deg,
+            rgba(239, 68, 68, 0.3),
+            rgba(220, 38, 38, 0.2));
+        backdrop-filter: blur(15px);
+        border: 1px solid rgba(239, 68, 68, 0.4);
+        border-radius: 16px;
+        padding: 1rem 1.25rem;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .overdue-banner .icon {
+        font-size: 1.5rem;
+        flex-shrink: 0;
+    }
+
+    .overdue-banner .body {
+        flex: 1;
+    }
+
+    .overdue-banner .title {
+        color: #fff;
+        font-weight: 700;
+        font-size: 0.95rem;
+    }
+
+    .overdue-banner .text {
+        color: rgba(255, 255, 255, 0.85);
+        font-size: 0.82rem;
+        margin-top: 0.15rem;
+    }
+
+    /* Mobile optimizations */
+    @media (max-width: 576px) {
+        .welcome-banner {
+            padding: 1.25rem 1.25rem;
+        }
+        .welcome-banner h2 {
+            font-size: 1.3rem;
+        }
+        .stat-box .value {
+            font-size: 1.4rem;
+        }
+        .stat-box {
+            padding: 0.9rem;
+        }
+        .stat-box .icon-wrap {
+            width: 38px;
+            height: 38px;
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- Welcome Banner -->
+<div class="welcome-banner">
+    <h2>
+        سلام {{ user.first_name|default:user.username }} 🌱
+    </h2>
+    <p>
+        {% if stats.pending_today > 0 %}
+            امروز {{ stats.pending_today }} کار برای گیاهانت داری.
+        {% elif stats.today_activities > 0 %}
+            امروز {{ stats.today_activities }} فعالیت انجام دادی. عالی! ✨
+        {% else %}
+            همه گیاهانت امروز حالشون خوبه. ✨
+        {% endif %}
+    </p>
+
+    <div class="quick-add">
+        <a href="{% url 'plants:create' %}" class="btn btn-sm btn-primary-glass">
+            <i class="bi bi-plus-circle"></i> گیاه جدید
+        </a>
+        <a href="{% url 'plants:list' %}" class="btn btn-sm btn-glass">
+            <i class="bi bi-flower2"></i> گیاهان من
+        </a>
+        <a href="{% url 'care:calendar' %}" class="btn btn-sm btn-glass">
+            <i class="bi bi-calendar3"></i> تقویم
+        </a>
+    </div>
+</div>
+
+<!-- Overdue Alert -->
+{% if overdue_tasks %}
+    <div class="overdue-banner">
+        <div class="icon">⚠️</div>
+        <div class="body">
+            <div class="title">
+                {{ stats.overdue_tasks }} کار عقب‌افتاده داری
+            </div>
+            <div class="text">
+                {% for task in overdue_tasks|slice:":2" %}
+                    {{ task.plant_name }} ({{ task.care_type_name }}){% if not forloop.last %} · {% endif %}
+                {% endfor %}
+                {% if stats.overdue_tasks > 2 %}
+                    و {{ stats.overdue_tasks|add:"-2" }} مورد دیگر
+                {% endif %}
+            </div>
+        </div>
+        <a href="{% url 'care:calendar' %}" class="btn btn-sm btn-glass">
+            مشاهده
+        </a>
+    </div>
+{% endif %}
+
+<!-- Stats Grid -->
+<div class="stats-grid">
+    <a href="{% url 'plants:list' %}" class="stat-box" style="--accent: #10b981;">
+        <div class="icon-wrap">🌱</div>
+        <div class="label">کل گیاهان</div>
+        <div class="value">{{ stats.total_plants }}</div>
+        <div class="trend">
+            <i class="bi bi-check-circle text-success"></i>
+            {{ stats.healthy_plants }} سالم
+        </div>
+    </a>
+
+    <a href="{% url 'plants:list' %}?status=needs_attention" class="stat-box" style="--accent: #f59e0b;">
+        <div class="icon-wrap">⚠️</div>
+        <div class="label">نیازمند توجه</div>
+        <div class="value">{{ stats.need_attention }}</div>
+        <div class="trend">
+            <i class="bi bi-exclamation-circle"></i>
+            بررسی کنید
+        </div>
+    </a>
+
+    <div class="stat-box" style="--accent: #06b6d4;">
+        <div class="icon-wrap">💧</div>
+        <div class="label">آبیاری امروز</div>
+        <div class="value">{{ stats.need_watering }}</div>
+        <div class="trend">
+            <i class="bi bi-droplet"></i>
+            {% if stats.need_watering == 0 %}انجام شده{% else %}در انتظار{% endif %}
+        </div>
+    </div>
+
+    <div class="stat-box" style="--accent: #8b5cf6;">
+        <div class="icon-wrap">✅</div>
+        <div class="label">فعالیت امروز</div>
+        <div class="value">{{ stats.today_activities }}</div>
+        <div class="trend">
+            <i class="bi bi-graph-up"></i>
+            هفته: {{ stats.week_activities }}
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+
+    <!-- Left: Today Tasks -->
+    <div class="col-lg-5">
+        <div class="glass-card h-100">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="text-white mb-0">
+                    <i class="bi bi-calendar-check me-2"></i>
+                    کارهای امروز
+                </h5>
+                {% if today_schedules %}
+                    <span class="badge-glass">
+                        {{ stats.pending_today }} باقی‌مانده
+                    </span>
+                {% endif %}
+            </div>
+
+            {% if today_schedules %}
+                {% for task in today_schedules %}
+                    <a href="{% url 'plants:detail' task.plant_id %}"
+                       class="task-item">
+                        <div class="task-icon"
+                             style="background: {{ task.care_type_color }}25;
+                                    border-color: {{ task.care_type_color }}60;">
+                            {{ task.care_type_icon }}
+                        </div>
+                        <div class="task-body">
+                            <div class="task-title">{{ task.plant_name }}</div>
+                            <div class="task-meta">{{ task.care_type_name }}</div>
+                        </div>
+                        <div class="task-time">
+                            {% if task.time_of_day %}
+                                <i class="bi bi-clock"></i>
+                                {{ task.time_of_day|time:"H:i" }}
+                            {% else %}
+                                <i class="bi bi-arrow-left-circle"></i>
+                            {% endif %}
+                        </div>
+                    </a>
+                {% endfor %}
+            {% else %}
+                <div class="empty-state">
+                    <i class="bi bi-check2-circle"></i>
+                    <div>کاری برای امروز نداری 🎉</div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Right: Activity Chart -->
+    <div class="col-lg-7">
+        <div class="glass-card h-100">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="text-white mb-0">
+                    <i class="bi bi-graph-up-arrow me-2"></i>
+                    روند فعالیت‌ها
+                </h5>
+                <small class="text-glass-muted">۱۴ روز گذشته</small>
+            </div>
+
+            <div class="chart-container">
+                <canvas id="activityChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Plant Status Chart -->
+    <div class="col-lg-4">
+        <div class="glass-card h-100">
+            <h5 class="text-white mb-3">
+                <i class="bi bi-pie-chart me-2"></i>
+                وضعیت گیاهان
+            </h5>
+            <div class="chart-container">
+                <canvas id="statusChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Care Distribution Chart -->
+    <div class="col-lg-4">
+        <div class="glass-card h-100">
+            <h5 class="text-white mb-3">
+                <i class="bi bi-bar-chart me-2"></i>
+                توزیع مراقبت‌ها
+            </h5>
+            <div class="chart-container">
+                <canvas id="careChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="col-lg-4">
+        <div class="glass-card h-100">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="text-white mb-0">
+                    <i class="bi bi-clock-history me-2"></i>
+                    فعالیت‌های اخیر
+                </h5>
+                <a href="{% url 'plants:list' %}" class="text-glass small">
+                    همه
+                </a>
+            </div>
+
+            {% if recent_logs %}
+                {% for log in recent_logs %}
+                    <div class="d-flex align-items-start gap-2 mb-2 pb-2"
+                         style="border-bottom: 1px solid rgba(255,255,255,0.08);">
+                        <div style="font-size: 1.2rem; flex-shrink: 0;">
+                            {{ log.care_type.icon|default:'✓' }}
+                        </div>
+                        <div class="flex-grow-1 min-w-0">
+                            <div class="text-white small fw-bold">
+                                {{ log.plant.name }}
+                            </div>
+                            <div class="text-glass-muted" style="font-size: 0.72rem;">
+                                {{ log.care_type.name }} ·
+                                {{ log.performed_at|date:"m/d H:i" }}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty-state">
+                    <i class="bi bi-journal-x"></i>
+                    <div class="small">هنوز فعالیتی ثبت نشده</div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Recent Plants -->
+    <div class="col-12">
+        <div class="glass-card">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="text-white mb-0">
+                    <i class="bi bi-flower2 me-2"></i>
+                    گیاهان اخیر
+                </h5>
+                <a href="{% url 'plants:list' %}" class="text-glass small">
+                    مشاهده همه
+                </a>
+            </div>
+
+            {% if recent_plants %}
+                <div class="row g-3">
+                    {% for plant in recent_plants %}
+                        <div class="col-6 col-md-4 col-lg-2">
+                            {% include 'plants/_plant_card.html' with plant=plant %}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty-state">
+                    <i class="bi bi-flower1"></i>
+                    <div class="mb-3">هنوز گیاهی اضافه نکرده‌اید</div>
+                    <a href="{% url 'plants:create' %}" class="btn btn-primary-glass">
+                        <i class="bi bi-plus-circle me-2"></i>
+                        افزودن گیاه
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="{% static 'js/dashboard.js' %}"></script>
+{% endblock %}

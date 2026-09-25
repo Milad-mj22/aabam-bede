@@ -1,0 +1,134 @@
+<nav class="navbar navbar-expand-lg glass-navbar sticky-top">
+    <div class="container">
+        <a class="navbar-brand d-flex align-items-center gap-2" href="{% url 'core:dashboard' %}">
+            <i class="bi bi-flower1"></i>
+            <span>PlantCare</span>
+        </a>
+
+        <button class="navbar-toggler border-0" type="button"
+                data-bs-toggle="collapse" data-bs-target="#mainNav"
+                aria-label="منو">
+            <i class="bi bi-list text-white fs-3"></i>
+        </button>
+
+        <div class="collapse navbar-collapse" id="mainNav">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}"
+                       href="{% url 'core:dashboard' %}">
+                        <i class="bi bi-speedometer2 me-1"></i> داشبورد
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if 'plants' in request.path %}active{% endif %}"
+                       href="{% url 'plants:list' %}">
+                        <i class="bi bi-flower2 me-1"></i> گیاهان من
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if 'calendar' in request.path %}active{% endif %}"
+                       href="{% url 'care:calendar' %}">
+                        <i class="bi bi-calendar3 me-1"></i> تقویم
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if 'notifications' in request.path %}active{% endif %}"
+                       href="{% url 'notifications:list' %}">
+                        <i class="bi bi-bell me-1"></i> اطلاعیه‌ها
+                    </a>
+                </li>
+            </ul>
+
+            <ul class="navbar-nav">
+                <!-- 🔔 اطلاعیه‌ها -->
+                {% include 'notifications/_dropdown.html' %}
+
+                <!-- پروفایل -->
+<!-- پروفایل -->
+<li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle d-flex align-items-center gap-2"
+       href="#" role="button" data-bs-toggle="dropdown"
+       aria-expanded="false">
+        <i class="bi bi-person-circle fs-5"></i>
+        <span class="d-none d-lg-inline">{{ user.username }}</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end">
+        <li>
+            <a class="dropdown-item" href="{% url 'accounts:profile' %}">
+                <i class="bi bi-person"></i> پروفایل من
+            </a>
+        </li>
+        <li>
+            <a class="dropdown-item" href="{% url 'plants:create' %}">
+                <i class="bi bi-plus-circle"></i> افزودن گیاه
+            </a>
+        </li>
+        <li>
+            <a class="dropdown-item" href="{% url 'accounts:password_change' %}">
+                <i class="bi bi-key"></i> تغییر رمز
+            </a>
+        </li>
+        {% if user.is_staff %}
+            <li><hr class="dropdown-divider"></li>
+            <li>
+                <a class="dropdown-item" href="/admin/">
+                    <i class="bi bi-shield-lock"></i> پنل ادمین
+                </a>
+            </li>
+        {% endif %}
+        <li><hr class="dropdown-divider"></li>
+        <li>
+            <form method="post" action="{% url 'accounts:logout' %}" class="d-inline m-0 p-0">
+                {% csrf_token %}
+                <button type="submit"
+                        class="dropdown-item text-danger border-0 bg-transparent w-100 text-start">
+                    <i class="bi bi-box-arrow-right"></i> خروج
+                </button>
+            </form>
+        </li>
+    </ul>
+</li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- ============================
+     Mobile Bottom Navigation
+     ============================ -->
+<nav class="mobile-bottom-nav">
+    <div class="mobile-bottom-nav-inner">
+
+        <a href="{% url 'core:dashboard' %}"
+           class="mobile-nav-item {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+            <i class="bi bi-house-door"></i>
+            <span>داشبورد</span>
+        </a>
+
+        <a href="{% url 'plants:list' %}"
+           class="mobile-nav-item {% if 'plants' in request.path %}active{% endif %}">
+            <i class="bi bi-flower2"></i>
+            <span>گیاهان</span>
+        </a>
+
+        <a href="{% url 'care:calendar' %}"
+           class="mobile-nav-item {% if 'calendar' in request.path %}active{% endif %}">
+            <i class="bi bi-calendar3"></i>
+            <span>تقویم</span>
+        </a>
+
+        <a href="{% url 'notifications:list' %}"
+           class="mobile-nav-item {% if 'notifications' in request.path %}active{% endif %}">
+            <i class="bi bi-bell"></i>
+            <span>اطلاعیه</span>
+            <span class="mobile-nav-badge notif-mobile-badge" style="display:none;">0</span>
+        </a>
+
+        <a href="{% url 'accounts:profile' %}"
+           class="mobile-nav-item {% if 'profile' in request.path %}active{% endif %}">
+            <i class="bi bi-person-circle"></i>
+            <span>پروفایل</span>
+        </a>
+
+    </div>
+</nav>

@@ -1,0 +1,256 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}تقویم مراقبت | PlantCare{% endblock %}
+
+{% block extra_css %}
+<style>
+    .calendar-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 6px;
+    }
+
+    .calendar-table th {
+        color: rgba(255, 255, 255, 0.85);
+        font-weight: 600;
+        text-align: center;
+        padding: 0.6rem;
+        font-size: 0.85rem;
+        background: rgba(255, 255, 255, 0.08);
+        border-radius: 10px;
+    }
+
+    .calendar-day {
+        background: rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 12px;
+        padding: 0.5rem;
+        min-height: 110px;
+        vertical-align: top;
+        transition: all 0.25s ease;
+        cursor: pointer;
+    }
+
+    .calendar-day:hover {
+        background: rgba(255, 255, 255, 0.15);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .calendar-day.other-month {
+        opacity: 0.35;
+    }
+
+    .calendar-day.today {
+        background: linear-gradient(135deg,
+            rgba(16, 185, 129, 0.25),
+            rgba(6, 182, 212, 0.25));
+        border-color: rgba(16, 185, 129, 0.6);
+        box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.3);
+    }
+
+    .day-number {
+        color: #fff;
+        font-weight: 700;
+        font-size: 1rem;
+        margin-bottom: 0.4rem;
+    }
+
+    .day-event {
+        display: block;
+        font-size: 0.7rem;
+        padding: 2px 6px;
+        border-radius: 6px;
+        margin-bottom: 3px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        background: rgba(255, 255, 255, 0.12);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: #fff;
+        transition: all 0.15s ease;
+    }
+
+    .day-event:hover {
+        background: rgba(255, 255, 255, 0.25);
+    }
+
+    .day-event.more {
+        background: transparent;
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 0.65rem;
+        text-align: center;
+        border: none;
+    }
+
+    .calendar-nav-btn {
+        width: 42px;
+        height: 42px;
+        padding: 0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+    }
+
+    .legend-item {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.35rem 0.75rem;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 999px;
+        font-size: 0.8rem;
+        color: rgba(255, 255, 255, 0.9);
+    }
+
+    .legend-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        display: inline-block;
+    }
+
+    @media (max-width: 768px) {
+        .calendar-day {
+            min-height: 70px;
+            padding: 0.3rem;
+            font-size: 0.75rem;
+        }
+        .day-number { font-size: 0.85rem; }
+        .day-event { font-size: 0.6rem; padding: 1px 4px; }
+        .calendar-table { border-spacing: 3px; }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- Header -->
+<div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+    <div>
+        <h3 class="page-title mb-0">
+            <i class="bi bi-calendar3"></i> تقویم مراقبت
+        </h3>
+        <p class="page-subtitle">نمای کلی برنامه‌ها و فعالیت‌های گیاهان شما</p>
+    </div>
+
+    <div class="d-flex gap-2">
+        <a href="{% url 'plants:list' %}" class="btn btn-glass">
+            <i class="bi bi-flower2 me-2"></i> گیاهان من
+        </a>
+        <a href="{% url 'care:calendar' %}" class="btn btn-primary-glass">
+            <i class="bi bi-arrow-clockwise me-2"></i> امروز
+        </a>
+    </div>
+</div>
+
+<!-- Navigation + Month -->
+<div class="glass-card mb-3">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+
+        <a href="?year={{ prev_year }}&month={{ prev_month }}"
+           class="btn btn-glass calendar-nav-btn" title="ماه قبل">
+            <i class="bi bi-chevron-right"></i>
+        </a>
+
+        <div class="text-center">
+            <h4 class="text-white mb-0">{{ month_name }} {{ current_year }}</h4>
+            <small class="text-glass-muted">امروز: {{ today|date:"Y/m/d" }}</small>
+        </div>
+
+        <a href="?year={{ next_year }}&month={{ next_month }}"
+           class="btn btn-glass calendar-nav-btn" title="ماه بعد">
+            <i class="bi bi-chevron-left"></i>
+        </a>
+
+    </div>
+</div>
+
+<!-- Legend -->
+<div class="glass-card mb-3">
+    <div class="d-flex flex-wrap gap-2 align-items-center">
+        <span class="text-glass-muted small me-2">
+            <i class="bi bi-palette me-1"></i> راهنما:
+        </span>
+        <span class="legend-item">
+            <span class="legend-dot" style="background: #10b981;"></span> آبیاری
+        </span>
+        <span class="legend-item">
+            <span class="legend-dot" style="background: #f59e0b;"></span> کوددهی
+        </span>
+        <span class="legend-item">
+            <span class="legend-dot" style="background: #ef4444;"></span> دارو
+        </span>
+        <span class="legend-item">
+            <span class="legend-dot" style="background: #06b6d4;"></span> سایر
+        </span>
+    </div>
+</div>
+
+<!-- Calendar Grid -->
+<div class="glass-card">
+    <div class="table-responsive">
+        <table class="calendar-table">
+            <thead>
+                <tr>
+                    {% for wd in weekday_names %}
+                        <th>{{ wd }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for week in weeks %}
+                    <tr>
+                        {% for day in week %}
+                            <td class="calendar-day {% if not day.in_month %}other-month{% endif %} {% if day.is_today %}today{% endif %}"
+                                onclick="window.location='?year={{ day.date.year }}&month={{ day.date.month }}'">
+
+                                <div class="day-number">
+                                    {{ day.day }}
+                                    {% if day.is_today %}
+                                        <span class="badge-glass ms-1" style="font-size: 0.6rem; padding: 1px 6px;">
+                                            امروز
+                                        </span>
+                                    {% endif %}
+                                </div>
+
+                                {% for ev in day.events|slice:":3" %}
+                                    <a href="{% url 'plants:detail' ev.plant_id %}"
+                                       class="day-event text-decoration-none"
+                                       style="border-right: 3px solid {{ ev.color }};"
+                                       onclick="event.stopPropagation();"
+                                       title="{{ ev.title }}">
+                                        {{ ev.icon }} {{ ev.title|truncatechars:15 }}
+                                    </a>
+                                {% endfor %}
+
+                                {% if day.events|length > 3 %}
+                                    <div class="day-event more">
+                                        + {{ day.events|length|add:"-3" }} مورد دیگر
+                                    </div>
+                                {% endif %}
+
+                            </td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Empty state / info -->
+{% if not weeks %}
+    <div class="glass-card text-center py-5 mt-3">
+        <i class="bi bi-calendar-x text-white" style="font-size: 4rem; opacity: 0.5;"></i>
+        <h5 class="text-white mt-3">هیچ برنامه‌ای در این ماه نیست</h5>
+        <p class="text-glass-muted">برای شروع، برنامه مراقبت گیاه خود را تعریف کنید.</p>
+    </div>
+{% endif %}
+
+{% endblock %}

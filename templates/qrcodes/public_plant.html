@@ -1,0 +1,163 @@
+{% extends "qrcodes/_qr_base.html" %}
+
+{% block title %}{{ plant.name }} | PlantCare{% endblock %}
+
+{% block content %}
+
+<!-- Hero -->
+<div class="qr-hero">
+    {% if plant.image %}
+        <img src="{{ plant.image.url }}" alt="{{ plant.name }}">
+    {% else %}
+        <div class="qr-hero-placeholder">
+            <i class="bi bi-flower1"></i>
+        </div>
+    {% endif %}
+
+    <div class="qr-hero-overlay">
+        <span class="qr-status {{ plant.status }} mb-2 align-self-start">
+            <i class="bi bi-circle-fill" style="font-size: 0.5rem;"></i>
+            {{ plant.get_status_display }}
+        </span>
+
+        <h1>{{ plant.name }}</h1>
+
+        {% if plant.scientific_name %}
+            <div class="scientific">
+                <i class="bi bi-bookmark me-1"></i>
+                {{ plant.scientific_name }}
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Info Grid -->
+<div class="qr-info-grid">
+    <div class="qr-info-card">
+        <span class="icon">💧</span>
+        <div class="label">آخرین آبیاری</div>
+        <div class="value">
+            {% if last_watering %}
+                {{ last_watering.performed_at|date:"Y/m/d" }}
+            {% else %}
+                ثبت نشده
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="qr-info-card">
+        <span class="icon">📅</span>
+        <div class="label">برنامه بعدی</div>
+        <div class="value">
+            {% if next_schedule %}
+                {{ next_schedule.start_date|date:"Y/m/d" }}
+            {% else %}
+                تعیین نشده
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="qr-info-card">
+        <span class="icon">📊</span>
+        <div class="label">فعالیت امروز</div>
+        <div class="value">
+            {{ today_logs_count }}
+            {% if today_logs_count %}
+                <span class="pulse-badge"></span>
+            {% endif %}
+        </div>
+    </div>
+
+    {% if plant.location %}
+        <div class="qr-info-card">
+            <span class="icon">📍</span>
+            <div class="label">محل</div>
+            <div class="value">{{ plant.location }}</div>
+        </div>
+    {% endif %}
+
+    {% if plant.category %}
+        <div class="qr-info-card">
+            <span class="icon">🏷️</span>
+            <div class="label">دسته</div>
+            <div class="value">{{ plant.category }}</div>
+        </div>
+    {% endif %}
+
+    <div class="qr-info-card">
+        <span class="icon">👁️</span>
+        <div class="label">بازدید QR</div>
+        <div class="value">{{ qr.scan_count }}</div>
+    </div>
+</div>
+
+<!-- Description -->
+{% if plant.description %}
+    <div class="qr-section-title">
+        <i class="bi bi-info-circle"></i> توضیحات
+    </div>
+    <div class="glass-card">
+        <p class="text-glass mb-0">{{ plant.description|linebreaks }}</p>
+    </div>
+{% endif %}
+
+<!-- Recent activity -->
+<div class="qr-section-title">
+    <i class="bi bi-clock-history"></i> تاریخچه اخیر
+</div>
+
+{% if recent_logs %}
+    <div class="qr-timeline">
+        {% for log in recent_logs %}
+            <div class="qr-timeline-item">
+                <div class="qr-timeline-icon"
+                     style="background: {{ log.care_type.color|default:'#10b981' }};">
+                    {{ log.care_type.icon|default:'✓' }}
+                </div>
+                <div class="qr-timeline-body">
+                    <div class="title">{{ log.care_type.name }}</div>
+                    <div class="time">
+                        <i class="bi bi-clock me-1"></i>
+                        {{ log.performed_at|date:"Y/m/d — H:i" }}
+                    </div>
+                    {% if log.amount or log.product %}
+                        <div class="note">
+                            {% if log.amount %}<i class="bi bi-hash"></i> {{ log.amount }}{% endif %}
+                            {% if log.product %} · {{ log.product }}{% endif %}
+                        </div>
+                    {% endif %}
+                    {% if log.note %}
+                        <div class="note">{{ log.note|truncatechars:80 }}</div>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="glass-card text-center py-4">
+        <i class="bi bi-journal-x text-white" style="font-size: 2.5rem; opacity: 0.5;"></i>
+        <p class="text-glass-muted mt-2 mb-0">هنوز فعالیتی ثبت نشده است.</p>
+    </div>
+{% endif %}
+
+<!-- CTA -->
+<div class="qr-actions">
+    {% if user.is_authenticated and user == plant.owner %}
+        <a href="{% url 'plants:detail' plant.pk %}" class="btn btn-primary-glass">
+            <i class="bi bi-pencil-square me-2"></i> مدیریت گیاه
+        </a>
+    {% endif %}
+    <a href="{% url 'core:dashboard' %}" class="btn btn-glass">
+        <i class="bi bi-house me-2"></i> داشبورد
+    </a>
+</div>
+
+<!-- Footer note -->
+<div class="text-center mt-4">
+    <small class="text-glass-muted">
+        <i class="bi bi-shield-check me-1"></i>
+        این صفحه از طریق QR اختصاصی گیاه نمایش داده می‌شود.
+    </small>
+</div>
+
+{% endblock %}

@@ -1,0 +1,64 @@
+
+
+<nav class="mobile-bottom-nav">
+    <div class="mobile-bottom-nav-inner">
+
+        <a href="{% url 'core:dashboard' %}"
+           class="mobile-nav-item {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+            <i class="bi bi-house-door"></i>
+            <span>داشبورد</span>
+        </a>
+
+        <a href="{% url 'plants:list' %}"
+           class="mobile-nav-item {% if 'plants' in request.path %}active{% endif %}">
+            <i class="bi bi-flower2"></i>
+            <span>گیاهان</span>
+        </a>
+
+        <a href="{% url 'care:calendar' %}"
+           class="mobile-nav-item {% if 'calendar' in request.path %}active{% endif %}">
+            <i class="bi bi-calendar3"></i>
+            <span>تقویم</span>
+        </a>
+
+        <a href="{% url 'notifications:list' %}"
+           class="mobile-nav-item {% if 'notifications' in request.path %}active{% endif %}">
+            <i class="bi bi-bell"></i>
+            <span>اطلاعیه</span>
+            <span class="mobile-nav-badge notif-mobile-badge"
+                  style="display:none;">0</span>
+        </a>
+
+        <a href="{% url 'accounts:profile' %}"
+           class="mobile-nav-item {% if 'profile' in request.path %}active{% endif %}">
+            <i class="bi bi-person-circle"></i>
+            <span>پروفایل</span>
+        </a>
+
+    </div>
+</nav>
+
+<script>
+    // آپدیت شمارنده اعلان در bottom nav
+    (function () {
+        function updateMobileBadge() {
+            fetch('/notifications/unread-count/', {
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
+            })
+                .then(r => r.json())
+                .then(data => {
+                    document.querySelectorAll('.notif-mobile-badge').forEach(el => {
+                        if (data.count > 0) {
+                            el.textContent = data.count > 99 ? '99+' : data.count;
+                            el.style.display = 'flex';
+                        } else {
+                            el.style.display = 'none';
+                        }
+                    });
+                })
+                .catch(() => {});
+        }
+        updateMobileBadge();
+        setInterval(updateMobileBadge, 60000);
+    })();
+</script>

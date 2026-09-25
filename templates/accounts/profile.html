@@ -1,0 +1,169 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}پروفایل من | PlantCare{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+
+            <!-- Header -->
+            <div class="glass-card mb-4">
+                <div class="d-flex align-items-center gap-4 flex-wrap">
+                    <div class="position-relative">
+                        {% if user.avatar %}
+                            <img src="{{ user.avatar.url }}"
+                                 alt="{{ user.username }}"
+                                 class="rounded-circle"
+                                 style="width: 90px; height: 90px; object-fit: cover;
+                                        border: 3px solid rgba(255,255,255,0.4);">
+                        {% else %}
+                            <div class="rounded-circle d-flex align-items-center justify-content-center"
+                                 style="width: 90px; height: 90px;
+                                        background: linear-gradient(135deg, #10b981, #059669);
+                                        border: 3px solid rgba(255,255,255,0.4);">
+                                <i class="bi bi-person text-white" style="font-size: 2.5rem;"></i>
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="flex-grow-1">
+                        <h4 class="text-white mb-1">
+                            {% if user.get_full_name %}
+                                {{ user.get_full_name }}
+                            {% else %}
+                                {{ user.username }}
+                            {% endif %}
+                        </h4>
+                        <p class="text-glass-muted mb-1">
+                            <i class="bi bi-at me-1"></i>{{ user.username }}
+                        </p>
+                        <p class="text-glass-muted mb-0 small">
+                            <i class="bi bi-envelope me-1"></i>{{ user.email }}
+                        </p>
+                    </div>
+
+                    <div>
+                        <span class="badge-glass
+                            {% if user.status == 'active' %}badge-status-healthy{% endif %}
+                            {% if user.status == 'pending' %}badge-status-warning{% endif %}
+                            {% if user.status == 'rejected' %}badge-status-danger{% endif %}">
+                            <i class="bi bi-circle-fill" style="font-size: 0.5rem;"></i>
+                            {{ user.get_status_display }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Edit Form -->
+            <div class="glass-card">
+                <h5 class="text-white mb-4">
+                    <i class="bi bi-pencil-square me-2"></i>
+                    ویرایش اطلاعات
+                </h5>
+
+                <form method="post" enctype="multipart/form-data" novalidate>
+                    {% csrf_token %}
+
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger">
+                            {% for error in form.non_field_errors %}{{ error }}{% endfor %}
+                        </div>
+                    {% endif %}
+
+                    <div class="row g-3">
+
+                        <div class="col-md-6">
+                            <label for="{{ form.first_name.id_for_label }}" class="form-label">نام</label>
+                            <input type="text"
+                                   name="{{ form.first_name.name }}"
+                                   id="{{ form.first_name.id_for_label }}"
+                                   class="form-control"
+                                   value="{{ form.first_name.value|default:'' }}"
+                                   placeholder="نام">
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="{{ form.last_name.id_for_label }}" class="form-label">نام خانوادگی</label>
+                            <input type="text"
+                                   name="{{ form.last_name.name }}"
+                                   id="{{ form.last_name.id_for_label }}"
+                                   class="form-control"
+                                   value="{{ form.last_name.value|default:'' }}"
+                                   placeholder="نام خانوادگی">
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="{{ form.email.id_for_label }}" class="form-label">ایمیل</label>
+                            <input type="email"
+                                   name="{{ form.email.name }}"
+                                   id="{{ form.email.id_for_label }}"
+                                   class="form-control"
+                                   value="{{ form.email.value|default:'' }}">
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="{{ form.phone.id_for_label }}" class="form-label">تلفن</label>
+                            <input type="text"
+                                   name="{{ form.phone.name }}"
+                                   id="{{ form.phone.id_for_label }}"
+                                   class="form-control"
+                                   value="{{ form.phone.value|default:'' }}">
+                        </div>
+
+                        <div class="col-12">
+                            <label for="{{ form.avatar.id_for_label }}" class="form-label">تصویر پروفایل</label>
+                            <input type="file"
+                                   name="{{ form.avatar.name }}"
+                                   id="{{ form.avatar.id_for_label }}"
+                                   class="form-control"
+                                   accept="image/*">
+                            {% if user.avatar %}
+                                <small class="helptext">برای تغییر، فایل جدیدی انتخاب کنید.</small>
+                            {% endif %}
+                        </div>
+
+                    </div>
+
+                    <div class="divider-glass"></div>
+
+                    <div class="d-flex justify-content-between flex-wrap gap-2">
+                        <button type="submit" class="btn btn-primary-glass">
+                            <i class="bi bi-check2 me-2"></i> ذخیره تغییرات
+                        </button>
+                        <a href="{% url 'accounts:password_change' %}" class="btn btn-glass">
+                            <i class="bi bi-key me-2"></i> تغییر رمز عبور
+                        </a>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Quick Links -->
+            <div class="row g-3 mt-2">
+                <div class="col-md-4">
+                    <a href="{% url 'plants:list' %}" class="glass-card d-block text-decoration-none text-center">
+                        <i class="bi bi-flower2 fs-2 text-white d-block mb-2"></i>
+                        <span class="text-glass">گیاهان من</span>
+                    </a>
+                </div>
+                <div class="col-md-4">
+                    <a href="{% url 'care:calendar' %}" class="glass-card d-block text-decoration-none text-center">
+                        <i class="bi bi-calendar3 fs-2 text-white d-block mb-2"></i>
+                        <span class="text-glass">تقویم مراقبت</span>
+                    </a>
+                </div>
+                <div class="col-md-4">
+                    <a href="{% url 'notifications:list' %}" class="glass-card d-block text-decoration-none text-center">
+                        <i class="bi bi-bell fs-2 text-white d-block mb-2"></i>
+                        <span class="text-glass">اطلاعیه‌ها</span>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+{% endblock %}

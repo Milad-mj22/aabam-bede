@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}گیاهان من | PlantCare{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+    <div>
+        <h3 class="page-title mb-0">
+            <i class="bi bi-flower2"></i> گیاهان من
+        </h3>
+        <p class="page-subtitle">
+            {{ plants.count }} گیاه ثبت‌شده
+        </p>
+    </div>
+
+    <a href="{% url 'plants:create' %}" class="btn btn-primary-glass">
+        <i class="bi bi-plus-circle me-2"></i>
+        افزودن گیاه جدید
+    </a>
+</div>
+
+<!-- نوار جستجو و فیلتر -->
+<div class="glass-card mb-4">
+    <form method="get" class="row g-2 align-items-center">
+        <div class="col-md-6">
+            <div class="input-icon-group">
+                <i class="bi bi-search input-icon"></i>
+                <input type="text"
+                       name="q"
+                       class="form-control"
+                       placeholder="جستجو بر اساس نام، گونه، محل..."
+                       value="{{ request.GET.q|default:'' }}">
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <select name="status" class="form-select">
+                <option value="">همه وضعیت‌ها</option>
+                <option value="healthy" {% if request.GET.status == 'healthy' %}selected{% endif %}>سالم</option>
+                <option value="needs_attention" {% if request.GET.status == 'needs_attention' %}selected{% endif %}>نیازمند توجه</option>
+                <option value="sick" {% if request.GET.status == 'sick' %}selected{% endif %}>بیمار</option>
+                <option value="recovering" {% if request.GET.status == 'recovering' %}selected{% endif %}>در حال بهبود</option>
+            </select>
+        </div>
+
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-primary-glass w-100">
+                <i class="bi bi-funnel"></i> فیلتر
+            </button>
+        </div>
+    </form>
+</div>
+
+<!-- گرید گیاهان -->
+{% if plants %}
+    <div class="row g-4">
+        {% for plant in plants %}
+            <div class="col-md-6 col-lg-4">
+                {% include 'plants/_plant_card.html' with plant=plant %}
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- صفحه‌بندی -->
+    {% if is_paginated %}
+        <nav class="mt-4">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link btn-glass" href="?page={{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}">
+                            <i class="bi bi-chevron-right"></i>
+                        </a>
+                    </li>
+                {% endif %}
+
+                <li class="page-item active">
+                    <span class="page-link btn-primary-glass">
+                        صفحه {{ page_obj.number }} از {{ page_obj.paginator.num_pages }}
+                    </span>
+                </li>
+
+                {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link btn-glass" href="?page={{ page_obj.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}">
+                            <i class="bi bi-chevron-left"></i>
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    {% endif %}
+
+{% else %}
+    <div class="glass-card text-center py-5">
+        <i class="bi bi-flower1 text-white" style="font-size: 5rem; opacity: 0.5;"></i>
+        <h4 class="text-white mt-4">هنوز گیاهی اضافه نکرده‌اید</h4>
+        <p class="text-glass-muted mb-4">
+            اولین گیاه خود را اضافه کنید و مراقبت از آن را آغاز نمایید.
+        </p>
+        <a href="{% url 'plants:create' %}" class="btn btn-primary-glass">
+            <i class="bi bi-plus-circle me-2"></i>
+            افزودن اولین گیاه
+        </a>
+    </div>
+{% endif %}
+
+{% endblock %}

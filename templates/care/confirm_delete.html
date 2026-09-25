@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}حذف {{ object_type }} | PlantCare{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="glass-card text-center py-5">
+
+            <div class="d-inline-flex align-items-center justify-content-center mb-4"
+                 style="width: 100px; height: 100px; border-radius: 50%;
+                        background: linear-gradient(135deg, #ef4444, #b91c1c);
+                        box-shadow: 0 12px 40px rgba(239,68,68,0.5);">
+                <i class="bi bi-exclamation-triangle text-white" style="font-size: 3rem;"></i>
+            </div>
+
+            <h4 class="text-white mb-3">حذف {{ object_type|default:'آیتم' }}</h4>
+
+            <p class="text-glass mb-4">
+                آیا از حذف این مورد مطمئن هستید؟
+            </p>
+
+            <div class="glass-card-soft p-3 mb-4 text-start">
+                <div class="text-white fw-bold">{{ object }}</div>
+                {% if object.description %}
+                    <div class="text-glass-muted small mt-1">{{ object.description }}</div>
+                {% endif %}
+            </div>
+
+            <p class="text-glass-muted small mb-4">
+                این عمل قابل بازگشت نیست.
+            </p>
+
+            <form method="post" class="d-flex justify-content-center gap-2 flex-wrap">
+                {% csrf_token %}
+                <a href="{{ cancel_url|default:'#' }}" class="btn btn-glass">
+                    <i class="bi bi-arrow-right me-2"></i> انصراف
+                </a>
+                <button type="submit" class="btn btn-danger-glass">
+                    <i class="bi bi-trash me-2"></i> بله، حذف شود
+                </button>
+            </form>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

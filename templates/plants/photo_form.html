@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}افزودن تصویر | PlantCare{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="glass-card">
+            <h4 class="text-white mb-3">
+                <i class="bi bi-cloud-upload me-2"></i>
+                افزودن تصویر برای {{ plant.name }}
+            </h4>
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label class="form-label">تصویر</label>
+                    {{ form.image }}
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">توضیح</label>
+                    {{ form.caption }}
+                </div>
+                <div class="d-flex justify-content-between">
+                    <a href="{% url 'plants:detail' plant.pk %}" class="btn btn-glass">انصراف</a>
+                    <button type="submit" class="btn btn-primary-glass">
+                        <i class="bi bi-check2 me-2"></i> آپلود
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

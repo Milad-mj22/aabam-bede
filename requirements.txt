@@ -1,0 +1,10 @@
+Django
+psycopg2-binary
+redis
+celery
+qrcode[pil]
+Pillow
+python-decouple
+django-crispy-forms
+crispy-bootstrap5
+django-ckeditor

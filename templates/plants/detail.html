@@ -1,0 +1,511 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ plant.name }} | PlantCare{% endblock %}
+
+{% block content %}
+
+<!-- ================= Header ================= -->
+<div class="glass-card mb-4">
+    <div class="row g-4 align-items-center">
+
+        <div class="col-md-3 text-center">
+            {% if plant.image %}
+                <img src="{{ plant.image.url }}"
+                     alt="{{ plant.name }}"
+                     class="img-fluid rounded-4"
+                     style="max-height: 220px; object-fit: cover;
+                            border: 3px solid rgba(255,255,255,0.3);">
+            {% else %}
+                <div class="d-flex align-items-center justify-content-center rounded-4 mx-auto"
+                     style="width: 200px; height: 200px;
+                            background: linear-gradient(135deg, rgba(16,185,129,0.4), rgba(6,182,212,0.4));
+                            border: 3px solid rgba(255,255,255,0.3);">
+                    <i class="bi bi-flower1 text-white" style="font-size: 5rem;"></i>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="col-md-6">
+            <h2 class="text-white mb-2">{{ plant.name }}</h2>
+
+            {% if plant.scientific_name %}
+                <p class="text-glass-muted fst-italic mb-3">
+                    <i class="bi bi-bookmark me-1"></i>{{ plant.scientific_name }}
+                </p>
+            {% endif %}
+
+            <div class="d-flex flex-wrap gap-2 mb-3">
+                <span class="badge-glass
+                    {% if plant.status == 'healthy' %}badge-status-healthy{% endif %}
+                    {% if plant.status == 'needs_attention' %}badge-status-warning{% endif %}
+                    {% if plant.status == 'sick' %}badge-status-danger{% endif %}">
+                    <i class="bi bi-circle-fill" style="font-size: 0.5rem;"></i>
+                    {{ plant.get_status_display }}
+                </span>
+
+                {% if plant.location %}
+                    <span class="badge-glass">
+                        <i class="bi bi-geo-alt"></i> {{ plant.location }}
+                    </span>
+                {% endif %}
+
+                {% if plant.category %}
+                    <span class="badge-glass">
+                        <i class="bi bi-tag"></i> {{ plant.category }}
+                    </span>
+                {% endif %}
+            </div>
+
+            {% if plant.description %}
+                <p class="text-glass-muted small mb-0">
+                    {{ plant.description|truncatewords:25 }}
+                </p>
+            {% endif %}
+        </div>
+
+        <div class="col-md-3">
+            <div class="d-grid gap-2">
+                <a href="{% url 'care:log_create' plant.pk %}" class="btn btn-primary-glass">
+                    <i class="bi bi-plus-circle me-2"></i> ثبت فعالیت
+                </a>
+                <a href="{% url 'care:schedule_create' plant.pk %}" class="btn btn-glass">
+                    <i class="bi bi-calendar-plus me-2"></i> برنامه مراقبت
+                </a>
+                <a href="{% url 'plants:update' plant.pk %}" class="btn btn-glass">
+                    <i class="bi bi-pencil me-2"></i> ویرایش
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ================= Tabs ================= -->
+<ul class="nav nav-pills glass-tabs mb-4" id="plantTabs" role="tablist">
+    <li class="nav-item" role="presentation">
+        <button class="nav-link active" data-bs-toggle="pill" data-bs-target="#tab-overview" type="button">
+            <i class="bi bi-info-circle me-1"></i> نمای کلی
+        </button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-schedule" type="button">
+            <i class="bi bi-calendar-check me-1"></i> برنامه‌ها
+        </button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-history" type="button">
+            <i class="bi bi-clock-history me-1"></i> تاریخچه
+        </button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-photos" type="button">
+            <i class="bi bi-images me-1"></i> تصاویر
+        </button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-qr" type="button">
+            <i class="bi bi-qr-code me-1"></i> QR Code
+        </button>
+    </li>
+</ul>
+
+<!-- ================= Tab Content ================= -->
+<div class="tab-content">
+
+    <!-- ===================== Overview ===================== -->
+    <div class="tab-pane fade show active" id="tab-overview">
+        <div class="row g-3">
+            <div class="col-md-4">
+                <div class="glass-card text-center">
+                    <i class="bi bi-droplet-half text-info fs-2 mb-2"></i>
+                    <div class="text-glass-muted small">آخرین آبیاری</div>
+                    <div class="text-white fw-bold">
+                        {% with last=plant.last_watering %}
+                            {% if last %}{{ last.performed_at|date:"Y/m/d" }}{% else %}ثبت نشده{% endif %}
+                        {% endwith %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="glass-card text-center">
+                    <i class="bi bi-calendar-event text-warning fs-2 mb-2"></i>
+                    <div class="text-glass-muted small">آبیاری بعدی</div>
+                    <div class="text-white fw-bold">
+                        {% with nx=plant.next_watering %}
+                            {% if nx %}{{ nx.start_date|date:"Y/m/d" }}{% else %}تعیین نشده{% endif %}
+                        {% endwith %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="glass-card text-center">
+                    <i class="bi bi-journal-text text-success fs-2 mb-2"></i>
+                    <div class="text-glass-muted small">تعداد فعالیت‌ها</div>
+                    <div class="text-white fw-bold">{{ plant.care_logs.count }}</div>
+                </div>
+            </div>
+
+            {% if plant.light_need or plant.temperature or plant.humidity %}
+                <div class="col-12">
+                    <div class="glass-card">
+                        <h5 class="text-white mb-3">
+                            <i class="bi bi-sliders me-2"></i> شرایط محیطی
+                        </h5>
+                        <div class="row g-3 text-center">
+                            {% if plant.light_need %}
+                                <div class="col-md-4">
+                                    <i class="bi bi-brightness-high fs-3 text-warning d-block mb-2"></i>
+                                    <div class="text-glass-muted small">نیاز نوری</div>
+                                    <div class="text-white">{{ plant.light_need }}</div>
+                                </div>
+                            {% endif %}
+                            {% if plant.temperature %}
+                                <div class="col-md-4">
+                                    <i class="bi bi-thermometer-half fs-3 text-danger d-block mb-2"></i>
+                                    <div class="text-glass-muted small">دما</div>
+                                    <div class="text-white">{{ plant.temperature }}</div>
+                                </div>
+                            {% endif %}
+                            {% if plant.humidity %}
+                                <div class="col-md-4">
+                                    <i class="bi bi-moisture fs-3 text-info d-block mb-2"></i>
+                                    <div class="text-glass-muted small">رطوبت</div>
+                                    <div class="text-white">{{ plant.humidity }}</div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
+            {% if plant.notes %}
+                <div class="col-12">
+                    <div class="glass-card">
+                        <h5 class="text-white mb-3">
+                            <i class="bi bi-sticky me-2"></i> یادداشت‌ها
+                        </h5>
+                        <p class="text-glass mb-0">{{ plant.notes|linebreaks }}</p>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- ===================== Schedule ===================== -->
+    <div class="tab-pane fade" id="tab-schedule">
+        <div class="glass-card">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="text-white mb-0">
+                    <i class="bi bi-calendar-check me-2"></i> برنامه‌های مراقبت
+                </h5>
+                <a href="{% url 'care:schedule_create' plant.pk %}" class="btn btn-sm btn-primary-glass">
+                    <i class="bi bi-plus-lg"></i> برنامه جدید
+                </a>
+            </div>
+
+            {% if schedules %}
+                <div class="list-group list-group-flush">
+                    {% for sched in schedules %}
+                        <div class="d-flex justify-content-between align-items-center py-3 border-bottom"
+                             style="border-color: rgba(255,255,255,0.1) !important;">
+                            <div>
+                                <div class="text-white fw-bold">
+                                    {{ sched.care_type.icon }} {{ sched.care_type.name }}
+                                </div>
+                                <div class="text-glass-muted small">
+                                    {{ sched.get_frequency_display }}
+                                    {% if sched.frequency == 'every_n_days' %}
+                                        — هر {{ sched.interval_days }} روز
+                                    {% endif %}
+                                    — از {{ sched.start_date|date:"Y/m/d" }}
+                                    {% if sched.time_of_day %}
+                                        — ساعت {{ sched.time_of_day|time:"H:i" }}
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="d-flex gap-1">
+                                <a href="{% url 'care:schedule_update' sched.pk %}"
+                                   class="btn btn-sm btn-glass" title="ویرایش">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                <a href="{% url 'care:schedule_delete' sched.pk %}"
+                                   class="btn btn-sm btn-danger-glass" title="حذف"
+                                   data-confirm="این برنامه حذف شود؟">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="text-glass-muted text-center py-4 mb-0">
+                    <i class="bi bi-calendar-x fs-1 d-block mb-2"></i>
+                    هنوز برنامه مراقبتی تعریف نشده است.
+                </p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- ===================== History ===================== -->
+    <div class="tab-pane fade" id="tab-history">
+        <div class="glass-card">
+            <h5 class="text-white mb-4">
+                <i class="bi bi-clock-history me-2"></i> تاریخچه فعالیت‌ها
+            </h5>
+
+            {% if logs %}
+                <div class="timeline">
+                    {% for log in logs %}
+                        <div class="timeline-item">
+                            <div class="timeline-icon"
+                                 style="background: {{ log.care_type.color|default:'#10b981' }};">
+                                {{ log.care_type.icon|default:'✓' }}
+                            </div>
+                            <div class="timeline-content">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <div class="text-white fw-bold">{{ log.care_type.name }}</div>
+                                        <div class="text-glass-muted small">
+                                            {{ log.performed_at|date:"Y/m/d — H:i" }}
+                                        </div>
+                                        {% if log.amount %}
+                                            <div class="text-glass small mt-1">
+                                                <i class="bi bi-hash"></i> {{ log.amount }}
+                                            </div>
+                                        {% endif %}
+                                        {% if log.product %}
+                                            <div class="text-glass small">
+                                                <i class="bi bi-box"></i> {{ log.product }}
+                                            </div>
+                                        {% endif %}
+                                        {% if log.note %}
+                                            <div class="text-glass-muted small mt-1">
+                                                {{ log.note }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    <a href="{% url 'care:log_delete' log.pk %}"
+                                       class="btn btn-sm btn-glass"
+                                       data-confirm="این فعالیت حذف شود؟">
+                                        <i class="bi bi-trash"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+
+                {% if plant.care_logs.count > logs|length %}
+                    <div class="text-center mt-3">
+                        <small class="text-glass-muted">
+                            نمایش {{ logs|length }} از {{ plant.care_logs.count }} فعالیت
+                        </small>
+                    </div>
+                {% endif %}
+            {% else %}
+                <p class="text-glass-muted text-center py-4 mb-0">
+                    <i class="bi bi-journal-x fs-1 d-block mb-2"></i>
+                    هنوز فعالیتی ثبت نشده است.
+                </p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- ===================== Photos ===================== -->
+    <div class="tab-pane fade" id="tab-photos">
+        <div class="glass-card">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="text-white mb-0">
+                    <i class="bi bi-images me-2"></i> گالری تصاویر
+                </h5>
+                <a href="{% url 'plants:photo_upload' plant.pk %}" class="btn btn-sm btn-primary-glass">
+                    <i class="bi bi-cloud-upload"></i> افزودن تصویر
+                </a>
+            </div>
+
+            {% if photos %}
+                <div class="row g-3">
+                    {% for photo in photos %}
+                        <div class="col-6 col-md-4 col-lg-3">
+                            <div class="position-relative rounded-3 overflow-hidden">
+                                <img src="{{ photo.image.url }}"
+                                     class="w-100"
+                                     style="height: 180px; object-fit: cover;">
+                                <a href="{% url 'plants:photo_delete' photo.pk %}"
+                                   class="btn btn-sm btn-danger-glass position-absolute"
+                                   style="top: 8px; left: 8px;"
+                                   data-confirm="این تصویر حذف شود؟">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            </div>
+                            {% if photo.caption %}
+                                <div class="text-glass small mt-2">{{ photo.caption }}</div>
+                            {% endif %}
+                            <div class="text-glass-muted small">
+                                {{ photo.taken_at|date:"Y/m/d" }}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="text-glass-muted text-center py-4 mb-0">
+                    <i class="bi bi-image fs-1 d-block mb-2"></i>
+                    هنوز تصویری اضافه نشده است.
+                </p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- ===================== QR ===================== -->
+    <div class="tab-pane fade" id="tab-qr">
+        <div class="glass-card">
+            <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+                <h5 class="text-white mb-0">
+                    <i class="bi bi-qr-code me-2"></i> کدهای QR
+                </h5>
+
+                {% if qr_codes %}
+                    <a href="{% url 'qrcodes:print' plant.pk %}"
+                       class="btn btn-sm btn-glass"
+                       target="_blank">
+                        <i class="bi bi-printer me-2"></i> چاپ همه QRها
+                    </a>
+                {% endif %}
+            </div>
+
+            <!-- دکمه‌های تولید -->
+            <div class="d-flex flex-wrap gap-2 mb-4">
+                <a href="{% url 'qrcodes:generate_plant' plant.pk %}" class="btn btn-primary-glass">
+                    <i class="bi bi-plus-circle me-2"></i> تولید Plant QR
+                </a>
+                <a href="{% url 'qrcodes:generate_action' plant.pk 'watering' %}" class="btn btn-glass">
+                    <i class="bi bi-droplet me-2"></i> تولید Watering QR
+                </a>
+                <a href="{% url 'qrcodes:generate_action' plant.pk 'fertilizer' %}" class="btn btn-glass">
+                    <i class="bi bi-flower2 me-2"></i> تولید Fertilizer QR
+                </a>
+            </div>
+
+            {% if qr_codes %}
+                <div class="row g-3">
+                    {% for qr in qr_codes %}
+                        <div class="col-md-6 col-lg-4">
+                            <div class="glass-card-soft p-3 text-center h-100 d-flex flex-column">
+
+                                <!-- نوع QR -->
+                                <div class="text-white small mb-2">
+                                    {% if qr.qr_type == 'plant' %}
+                                        <i class="bi bi-flower1"></i> Plant QR
+                                    {% else %}
+                                        <i class="bi bi-lightning"></i> {{ qr.action_type|title }} QR
+                                    {% endif %}
+                                </div>
+
+                                <!-- تصویر QR -->
+                                {% if qr.image %}
+                                    <a href="{{ qr.image.url }}" target="_blank">
+                                        <img src="{{ qr.image.url }}"
+                                             class="img-fluid bg-white rounded-3 p-2 mb-2"
+                                             style="max-width: 180px;"
+                                             alt="QR Code">
+                                    </a>
+                                {% else %}
+                                    <div class="bg-white rounded-3 p-3 mb-2 mx-auto"
+                                         style="width: 180px; height: 180px;
+                                                display: flex; align-items: center; justify-content: center;">
+                                        <small class="text-muted">بدون تصویر</small>
+                                    </div>
+                                {% endif %}
+
+                                <!-- آمار -->
+                                <div class="text-glass-muted small mb-2">
+                                    <i class="bi bi-eye me-1"></i>
+                                    {{ qr.scan_count }} بار اسکن
+                                    {% if qr.last_scanned_at %}
+                                        <br>
+                                        <small>آخرین: {{ qr.last_scanned_at|date:"m/d H:i" }}</small>
+                                    {% endif %}
+                                </div>
+
+                                <!-- لینک عمومی -->
+                                {% if qr.qr_type == 'plant' %}
+                                    <a href="{% url 'qrcodes:public_plant' qr.token %}"
+                                       class="text-glass small mb-2 text-decoration-none"
+                                       target="_blank">
+                                        <i class="bi bi-box-arrow-up-right me-1"></i>
+                                        مشاهده صفحه عمومی
+                                    </a>
+                                {% else %}
+                                    <a href="{% url 'qrcodes:action' qr.token %}"
+                                       class="text-glass small mb-2 text-decoration-none"
+                                       target="_blank">
+                                        <i class="bi bi-box-arrow-up-right me-1"></i>
+                                        تست لینک QR
+                                    </a>
+                                {% endif %}
+
+                                <!-- آخرین اسکن‌ها -->
+                                {% if qr.scan_logs.count %}
+                                    <div class="mt-auto pt-2 border-top"
+                                         style="border-color: rgba(255,255,255,0.1) !important;">
+                                        <small class="text-glass-muted d-block mb-1">
+                                            <i class="bi bi-clock-history me-1"></i>
+                                            آخرین اسکن‌ها:
+                                        </small>
+                                        {% for scan in qr.scan_logs.all|slice:":3" %}
+                                            <div class="d-flex justify-content-between align-items-center small">
+                                                <span class="text-glass-muted" style="font-size: 0.7rem;">
+                                                    {{ scan.ip_address|default:"—"|truncatechars:15 }}
+                                                </span>
+                                                <span class="text-glass-muted" style="font-size: 0.7rem;">
+                                                    {{ scan.scanned_at|date:"m/d H:i" }}
+                                                </span>
+                                                <span class="{% if scan.success %}text-success{% else %}text-danger{% endif %}"
+                                                      style="font-size: 0.7rem;">
+                                                    {% if scan.success %}✓{% else %}✗{% endif %}
+                                                </span>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+
+                                <!-- غیرفعال‌سازی -->
+                                <form method="post"
+                                      action="{% url 'qrcodes:revoke' qr.pk %}"
+                                      class="mt-2">
+                                    {% csrf_token %}
+                                    <button class="btn btn-sm btn-danger-glass w-100"
+                                            data-confirm="این QR غیرفعال شود؟ (دیگر قابل استفاده نخواهد بود)">
+                                        <i class="bi bi-x-circle"></i> غیرفعال‌سازی
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="text-center py-5">
+                    <i class="bi bi-qr-code-scan text-white" style="font-size: 4rem; opacity: 0.5;"></i>
+                    <p class="text-glass-muted mt-3 mb-0">
+                        هنوز QR Code تولید نشده است.
+                    </p>
+                    <p class="text-glass-muted small">
+                        با دکمه‌های بالا اولین QR را برای این گیاه بسازید.
+                    </p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+</div>
+
+<!-- ================= Delete Plant ================= -->
+<div class="text-center mt-4">
+    <a href="{% url 'plants:delete' plant.pk %}" class="btn btn-danger-glass">
+        <i class="bi bi-trash me-2"></i> حذف گیاه
+    </a>
+</div>
+
+{% endblock %}

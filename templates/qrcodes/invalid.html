@@ -1,0 +1,53 @@
+{% extends "qrcodes/_qr_base.html" %}
+
+{% block title %}QR نامعتبر | PlantCare{% endblock %}
+
+{% block content %}
+
+<div class="qr-invalid-card">
+
+    <div class="qr-invalid-icon">
+        <i class="bi bi-x-lg"></i>
+    </div>
+
+    <h2 class="qr-success-title">
+        QR معتبر نیست
+    </h2>
+
+    <p class="qr-success-subtitle">
+        این کد QR معتبر نیست یا غیرفعال شده است.
+    </p>
+
+    {% if reason %}
+        <div class="glass-card mb-3">
+            <small class="text-glass-muted d-block mb-1">علت:</small>
+            <strong class="text-white">{{ reason }}</strong>
+        </div>
+    {% endif %}
+
+    <div class="glass-card text-start mb-3">
+        <p class="text-glass small mb-2">
+            <i class="bi bi-info-circle me-1"></i>
+            <strong>موارد احتمالی:</strong>
+        </p>
+        <ul class="text-glass-muted small mb-0" style="padding-right: 1.2rem;">
+            <li>این QR توسط مالک غیرفعال (Revoke) شده است.</li>
+            <li>تاریخ انقضای این QR به پایان رسیده است.</li>
+            <li>لینک QR دستکاری شده یا ناقص است.</li>
+        </ul>
+    </div>
+
+    <div class="qr-actions">
+        <a href="{% url 'core:dashboard' %}" class="btn btn-primary-glass">
+            <i class="bi bi-house me-2"></i> داشبورد
+        </a>
+        {% if not user.is_authenticated %}
+            <a href="{% url 'accounts:login' %}" class="btn btn-glass">
+                <i class="bi bi-box-arrow-in-left me-2"></i> ورود
+            </a>
+        {% endif %}
+    </div>
+
+</div>
+
+{% endblock %}

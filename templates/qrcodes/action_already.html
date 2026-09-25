@@ -1,0 +1,49 @@
+{% extends "qrcodes/_qr_base.html" %}
+
+{% block title %}قبلاً ثبت شده | PlantCare{% endblock %}
+
+{% block content %}
+
+<div class="qr-warn-card">
+
+    <div class="qr-warn-icon">
+        <i class="bi bi-hourglass-split"></i>
+    </div>
+
+    <h2 class="qr-success-title">
+        لطفاً کمی صبر کنید
+    </h2>
+
+    <p class="qr-success-subtitle">
+        این QR به‌تازگی برای گیاه «{{ plant.name }}» اسکن شده است.
+    </p>
+
+    <div class="qr-info-grid">
+        <div class="qr-info-card">
+            <span class="icon">⏱️</span>
+            <div class="label">مهلت انتظار</div>
+            <div class="value">{{ cooldown }} ثانیه</div>
+        </div>
+        <div class="qr-info-card">
+            <span class="icon">🌿</span>
+            <div class="label">گیاه</div>
+            <div class="value">{{ plant.name }}</div>
+        </div>
+    </div>
+
+    <p class="text-glass small mt-3">
+        برای جلوگیری از ثبت تکراری، سیستم اجازه نمی‌دهد در فاصله کوتاه چند بار ثبت انجام شود.
+    </p>
+
+    <div class="qr-actions">
+        <a href="{% url 'core:dashboard' %}" class="btn btn-glass">
+            <i class="bi bi-house me-2"></i> داشبورد
+        </a>
+        <button onclick="window.location.reload()" class="btn btn-primary-glass">
+            <i class="bi bi-arrow-clockwise me-2"></i> تلاش دوباره
+        </button>
+    </div>
+
+</div>
+
+{% endblock %}

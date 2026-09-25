@@ -1,0 +1,1397 @@
+/* ============================================
+   PlantCare - Glassmorphism Theme
+   ============================================ */
+
+:root {
+    /* رنگ‌های اصلی */
+    --pc-primary: #10b981;
+    --pc-primary-dark: #059669;
+    --pc-primary-light: #34d399;
+
+    --pc-secondary: #0ea5e9;
+    --pc-warning: #f59e0b;
+    --pc-danger: #ef4444;
+    --pc-success: #22c55e;
+    --pc-info: #06b6d4;
+
+    /* رنگ‌های شیشه */
+    --glass-bg: rgba(255, 255, 255, 0.15);
+    --glass-bg-strong: rgba(255, 255, 255, 0.25);
+    --glass-bg-soft: rgba(255, 255, 255, 0.08);
+    --glass-border: rgba(255, 255, 255, 0.3);
+    --glass-border-soft: rgba(255, 255, 255, 0.15);
+    --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+
+    /* متن */
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --text-light: #ffffff;
+    --text-muted: #94a3b8;
+
+    /* گرادیانت پس‌زمینه */
+    --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #10b981 100%);
+    --bg-gradient-2: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+    --bg-gradient-3: linear-gradient(135deg, #d4fc79 0%, #96e6a1 100%);
+
+    /* شعاع گوشه‌ها */
+    --radius-sm: 8px;
+    --radius-md: 14px;
+    --radius-lg: 20px;
+    --radius-xl: 28px;
+
+    /* Transitions */
+    --transition-fast: 0.15s ease;
+    --transition-base: 0.25s ease;
+    --transition-slow: 0.4s ease;
+}
+
+/* ============================================
+   Reset & Base
+   ============================================ */
+
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+}
+
+body {
+    font-family: 'Vazirmatn', 'Segoe UI', Tahoma, sans-serif;
+    background: var(--bg-gradient);
+    background-attachment: fixed;
+    min-height: 100vh;
+    color: var(--text-primary);
+    margin: 0;
+    padding: 0;
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* حباب‌های تزئینی پس‌زمینه */
+body::before,
+body::after {
+    content: '';
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.5;
+    z-index: -1;
+    pointer-events: none;
+}
+
+body::before {
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, #34d399, transparent 70%);
+    top: -150px;
+    right: -150px;
+    animation: float 20s ease-in-out infinite;
+}
+
+body::after {
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, #60a5fa, transparent 70%);
+    bottom: -200px;
+    left: -200px;
+    animation: float 25s ease-in-out infinite reverse;
+}
+
+@keyframes float {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(30px, -30px) scale(1.1); }
+}
+
+/* ============================================
+   Glass Card - کارت شیشه‌ای
+   ============================================ */
+
+.glass-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--glass-shadow);
+    padding: 1.75rem;
+    transition: all var(--transition-base);
+}
+
+.glass-card:hover {
+    background: var(--glass-bg-strong);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.25);
+}
+
+.glass-card-soft {
+    background: var(--glass-bg-soft);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border-soft);
+    border-radius: var(--radius-md);
+    box-shadow: 0 4px 20px 0 rgba(31, 38, 135, 0.1);
+}
+
+/* ============================================
+   Navbar شیشه‌ای
+   ============================================ */
+
+.glass-navbar {
+    background: var(--glass-bg-strong) !important;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--glass-border);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    padding: 0.75rem 0;
+}
+
+.glass-navbar .navbar-brand {
+    color: var(--text-light) !important;
+    font-weight: 700;
+    font-size: 1.4rem;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+}
+
+.glass-navbar .nav-link {
+    color: rgba(255, 255, 255, 0.9) !important;
+    font-weight: 500;
+    padding: 0.5rem 1rem !important;
+    border-radius: var(--radius-sm);
+    transition: all var(--transition-base);
+    margin: 0 0.15rem;
+}
+
+.glass-navbar .nav-link:hover {
+    background: rgba(255, 255, 255, 0.15);
+    color: #fff !important;
+    transform: translateY(-1px);
+}
+
+.glass-navbar .nav-link.active {
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff !important;
+}
+
+/* ============================================
+   Buttons
+   ============================================ */
+
+.btn {
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    padding: 0.6rem 1.4rem;
+    transition: all var(--transition-base);
+    border: 1px solid transparent;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-glass {
+    background: var(--glass-bg-strong);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    color: var(--text-light);
+}
+
+.btn-glass:hover {
+    background: rgba(255, 255, 255, 0.35);
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.btn-primary-glass {
+    background: linear-gradient(135deg, var(--pc-primary), var(--pc-primary-dark));
+    color: #fff;
+    border: none;
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+}
+
+.btn-primary-glass:hover {
+    background: linear-gradient(135deg, var(--pc-primary-light), var(--pc-primary));
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(16, 185, 129, 0.55);
+}
+
+.btn-outline-glass {
+    background: transparent;
+    border: 1.5px solid var(--glass-border);
+    color: var(--text-light);
+}
+
+.btn-outline-glass:hover {
+    background: var(--glass-bg-strong);
+    color: #fff;
+}
+
+.btn-danger-glass {
+    background: linear-gradient(135deg, #ef4444, #b91c1c);
+    color: #fff;
+    border: none;
+    box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);
+}
+
+.btn-danger-glass:hover {
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(239, 68, 68, 0.55);
+}
+
+.btn-warning-glass {
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    color: #fff;
+    border: none;
+}
+
+.btn-warning-glass:hover {
+    color: #fff;
+    transform: translateY(-2px);
+}
+
+/* ============================================
+   Forms - Glass Inputs
+   ============================================ */
+
+.form-control,
+.form-select {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-md);
+    padding: 0.75rem 1rem;
+    color: var(--text-light);
+    transition: all var(--transition-base);
+    font-size: 0.95rem;
+}
+
+.form-control::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.form-control:focus,
+.form-select:focus {
+    background: rgba(255, 255, 255, 0.25);
+    border-color: rgba(255, 255, 255, 0.6);
+    box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.1);
+    color: var(--text-light);
+    outline: none;
+}
+
+.form-select option {
+    background: #1e293b;
+    color: #fff;
+}
+
+.form-label {
+    color: var(--text-light);
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.form-label .required {
+    color: #fbbf24;
+    margin-right: 3px;
+}
+
+.form-text {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.8rem;
+}
+
+.invalid-feedback {
+    color: #fecaca;
+    font-weight: 500;
+}
+
+.form-control.is-invalid,
+.form-select.is-invalid {
+    border-color: #fca5a5;
+    background: rgba(239, 68, 68, 0.15);
+}
+
+/* Input Group with Icon */
+.input-icon-group {
+    position: relative;
+}
+
+.input-icon-group .input-icon {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: rgba(255, 255, 255, 0.7);
+    pointer-events: none;
+    font-size: 1.1rem;
+    z-index: 3;
+}
+
+.input-icon-group .form-control {
+    padding-right: 2.85rem;
+}
+
+/* ============================================
+   Alerts
+   ============================================ */
+
+.alert {
+    border-radius: var(--radius-md);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    padding: 1rem 1.25rem;
+    color: var(--text-light);
+    font-weight: 500;
+}
+
+.alert-success { background: rgba(34, 197, 94, 0.25); }
+.alert-danger  { background: rgba(239, 68, 68, 0.25); }
+.alert-warning { background: rgba(245, 158, 11, 0.25); }
+.alert-info    { background: rgba(6, 182, 212, 0.25); }
+
+.alert a {
+    color: #fde68a;
+    text-decoration: underline;
+    font-weight: 700;
+}
+
+.alert .btn-close {
+    filter: invert(1) brightness(2);
+    opacity: 0.7;
+}
+
+/* ============================================
+   Badges
+   ============================================ */
+
+.badge-glass {
+    background: var(--glass-bg-strong);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    color: var(--text-light);
+    border-radius: 999px;
+    padding: 0.35rem 0.85rem;
+    font-weight: 600;
+    font-size: 0.78rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.badge-status-healthy { background: rgba(34, 197, 94, 0.35); }
+.badge-status-warning { background: rgba(245, 158, 11, 0.35); }
+.badge-status-danger  { background: rgba(239, 68, 68, 0.35); }
+
+/* ============================================
+   Page Title
+   ============================================ */
+
+.page-title {
+    color: var(--text-light);
+    font-weight: 700;
+    font-size: 1.75rem;
+    margin-bottom: 1.5rem;
+    text-shadow: 0 2px 15px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.page-subtitle {
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 0.95rem;
+    margin-top: -1rem;
+    margin-bottom: 1.5rem;
+}
+
+/* ============================================
+   Stats Cards (Dashboard)
+   ============================================ */
+
+.stat-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    box-shadow: var(--glass-shadow);
+    transition: all var(--transition-base);
+    position: relative;
+    overflow: hidden;
+    height: 100%;
+}
+
+.stat-card:hover {
+    transform: translateY(-4px);
+    background: var(--glass-bg-strong);
+}
+
+.stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    transform: translate(30%, -30%);
+}
+
+.stat-card .stat-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.6rem;
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid var(--glass-border);
+    margin-bottom: 1rem;
+}
+
+.stat-card .stat-label {
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin-bottom: 0.35rem;
+}
+
+.stat-card .stat-value {
+    color: #fff;
+    font-size: 2rem;
+    font-weight: 800;
+    line-height: 1;
+}
+
+.stat-card .stat-trend {
+    color: rgba(255, 255, 255, 0.75);
+    font-size: 0.8rem;
+    margin-top: 0.5rem;
+}
+
+/* ============================================
+   Plant Cards
+   ============================================ */
+
+.plant-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    transition: all var(--transition-base);
+    box-shadow: var(--glass-shadow);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.plant-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+    background: var(--glass-bg-strong);
+}
+
+.plant-card .plant-image {
+    height: 200px;
+    overflow: hidden;
+    position: relative;
+}
+
+.plant-card .plant-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--transition-slow);
+}
+
+.plant-card:hover .plant-image img {
+    transform: scale(1.08);
+}
+
+.plant-card .plant-placeholder {
+    height: 200px;
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.3), rgba(6, 182, 212, 0.3));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3.5rem;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.plant-card .plant-body {
+    padding: 1.25rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.plant-card .plant-name {
+    color: #fff;
+    font-weight: 700;
+    font-size: 1.15rem;
+    margin-bottom: 0.35rem;
+}
+
+.plant-card .plant-scientific {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.82rem;
+    font-style: italic;
+    margin-bottom: 0.75rem;
+}
+
+.plant-card .plant-actions {
+    margin-top: auto;
+    display: flex;
+    gap: 0.5rem;
+}
+
+/* ============================================
+   Dropdown
+   ============================================ */
+
+.dropdown-menu {
+    background: rgba(30, 41, 59, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-md);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+    padding: 0.5rem;
+    min-width: 200px;
+}
+
+.dropdown-item {
+    color: rgba(255, 255, 255, 0.9);
+    border-radius: var(--radius-sm);
+    padding: 0.6rem 0.85rem;
+    font-weight: 500;
+    transition: all var(--transition-fast);
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+}
+
+.dropdown-item:hover {
+    background: var(--glass-bg-strong);
+    color: #fff;
+    transform: translateX(-3px);
+}
+
+.dropdown-divider {
+    border-color: var(--glass-border-soft);
+    margin: 0.35rem 0;
+}
+
+/* ============================================
+   Modal
+   ============================================ */
+
+.modal-content {
+    background: rgba(30, 41, 59, 0.75);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    color: var(--text-light);
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.4);
+}
+
+.modal-header,
+.modal-footer {
+    border-color: var(--glass-border-soft);
+}
+
+.modal-title {
+    color: #fff;
+    font-weight: 700;
+}
+
+.modal .btn-close {
+    filter: invert(1) brightness(2);
+    opacity: 0.8;
+}
+
+/* ============================================
+   Utilities
+   ============================================ */
+
+.text-glass {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.text-glass-muted {
+    color: rgba(255, 255, 255, 0.65);
+}
+
+.divider-glass {
+    height: 1px;
+    background: linear-gradient(
+        to left,
+        transparent,
+        var(--glass-border),
+        transparent
+    );
+    margin: 1.5rem 0;
+    border: none;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+}
+::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.25);
+    border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.4);
+}
+
+/* ============================================
+   Responsive
+   ============================================ */
+
+@media (max-width: 768px) {
+    .page-title {
+        font-size: 1.4rem;
+    }
+    .stat-card .stat-value {
+        font-size: 1.6rem;
+    }
+    .glass-card {
+        padding: 1.25rem;
+        border-radius: var(--radius-md);
+    }
+    .plant-card .plant-image,
+    .plant-card .plant-placeholder {
+        height: 160px;
+    }
+}
+
+/* ============================================
+   Animations
+   ============================================ */
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-up {
+    animation: fadeInUp 0.5s ease-out both;
+}
+
+.delay-1 { animation-delay: 0.1s; }
+.delay-2 { animation-delay: 0.2s; }
+.delay-3 { animation-delay: 0.3s; }
+
+
+
+
+
+
+
+/* ============================================
+   Tabs (Glass)
+   ============================================ */
+
+.glass-tabs {
+    background: var(--glass-bg);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    padding: 0.5rem;
+    gap: 0.35rem;
+    flex-wrap: wrap;
+}
+
+.glass-tabs .nav-link {
+    color: rgba(255, 255, 255, 0.8);
+    border-radius: var(--radius-md);
+    padding: 0.65rem 1.1rem;
+    font-weight: 600;
+    transition: all var(--transition-base);
+    border: none;
+}
+
+.glass-tabs .nav-link:hover {
+    background: rgba(255, 255, 255, 0.12);
+    color: #fff;
+}
+
+.glass-tabs .nav-link.active {
+    background: linear-gradient(135deg, var(--pc-primary), var(--pc-primary-dark));
+    color: #fff;
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+}
+
+/* ============================================
+   Timeline
+   ============================================ */
+
+.timeline {
+    position: relative;
+    padding-right: 2rem;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    top: 10px;
+    bottom: 10px;
+    right: 18px;
+    width: 2px;
+    background: linear-gradient(to bottom,
+        rgba(255, 255, 255, 0.35),
+        rgba(255, 255, 255, 0.05));
+}
+
+.timeline-item {
+    position: relative;
+    margin-bottom: 1.5rem;
+    padding-right: 3.5rem;
+}
+
+.timeline-icon {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 1rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.timeline-content {
+    background: var(--glass-bg-soft);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border-soft);
+    border-radius: var(--radius-md);
+    padding: 1rem 1.15rem;
+    transition: all var(--transition-base);
+}
+
+.timeline-content:hover {
+    background: var(--glass-bg);
+    transform: translateX(-3px);
+}
+
+/* ============================================
+   Pagination (Glass)
+   ============================================ */
+
+.pagination .page-link {
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    color: rgba(255, 255, 255, 0.9);
+    border-radius: var(--radius-md) !important;
+    margin: 0 0.25rem;
+    transition: all var(--transition-base);
+}
+
+.pagination .page-link:hover {
+    background: var(--glass-bg-strong);
+    color: #fff;
+}
+
+.pagination .page-item.active .page-link {
+    background: linear-gradient(135deg, var(--pc-primary), var(--pc-primary-dark));
+    border-color: transparent;
+    color: #fff;
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+}
+
+
+
+
+
+
+/* ============================================
+   Breadcrumb (Glass)
+   ============================================ */
+
+.breadcrumb {
+    background: transparent;
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-md);
+    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    margin-bottom: 0;
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+    content: "‹";
+    color: rgba(255, 255, 255, 0.5);
+    padding: 0 0.5rem;
+    font-size: 1.1rem;
+}
+
+.breadcrumb-item a {
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.breadcrumb-item a:hover {
+    color: #fff !important;
+}
+
+.breadcrumb-item.active {
+    color: rgba(255, 255, 255, 0.65) !important;
+}
+
+/* ============================================
+   List Group (Glass)
+   ============================================ */
+
+.list-group-item {
+    background: transparent;
+    color: var(--text-light);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* ============================================
+   is-valid quick feedback
+   ============================================ */
+
+.form-control.is-valid,
+.form-select.is-valid {
+    border-color: rgba(34, 197, 94, 0.7);
+    background: rgba(34, 197, 94, 0.1);
+    box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.15);
+}
+
+
+
+
+
+
+/* ============================================
+   Notifications Widget
+   ============================================ */
+
+.notification-badge {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    background: linear-gradient(135deg, #ef4444, #b91c1c);
+    color: #fff;
+    font-size: 0.65rem;
+    font-weight: 700;
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.5);
+    animation: pulseBadge 2s infinite;
+}
+
+@keyframes pulseBadge {
+    0%, 100% { box-shadow: 0 2px 8px rgba(239, 68, 68, 0.5); }
+    50% { box-shadow: 0 2px 12px rgba(239, 68, 68, 0.8); }
+}
+
+.notification-menu {
+    width: 380px;
+    padding: 0;
+    overflow: hidden;
+    background: rgba(15, 23, 42, 0.92) !important;
+    backdrop-filter: blur(25px) !important;
+    -webkit-backdrop-filter: blur(25px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border-radius: 18px !important;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4) !important;
+}
+
+@media (max-width: 480px) {
+    .notification-menu {
+        width: calc(100vw - 30px) !important;
+        max-width: 340px;
+    }
+}
+
+.notification-header {
+    padding: 0.85rem 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+.notification-body {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.notification-item {
+    display: flex;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    position: relative;
+}
+
+.notification-item:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.notification-item.unread {
+    background: rgba(16, 185, 129, 0.08);
+}
+
+.notification-item.unread::before {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: #10b981;
+    border-radius: 3px;
+}
+
+.notification-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.notification-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.notification-title {
+    color: #fff;
+    font-weight: 600;
+    font-size: 0.85rem;
+    margin-bottom: 0.15rem;
+    line-height: 1.4;
+}
+
+.notification-message {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.78rem;
+    line-height: 1.4;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+.notification-time {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.7rem;
+    margin-top: 0.25rem;
+}
+
+.notification-footer {
+    padding: 0.65rem 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.notification-footer a {
+    color: #a7f3d0;
+    font-weight: 600;
+}
+
+.notification-footer a:hover {
+    color: #fff;
+}
+
+/* Empty state */
+.notif-empty {
+    text-align: center;
+    padding: 2rem 1rem;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.notif-empty i {
+    font-size: 2.5rem;
+    opacity: 0.5;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+/* ============================================
+   Notifications List Page
+   ============================================ */
+
+.notif-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    padding: 1.1rem 1.25rem;
+    margin-bottom: 0.85rem;
+    display: flex;
+    gap: 1rem;
+    transition: all 0.25s ease;
+    position: relative;
+}
+
+.notif-card:hover {
+    background: var(--glass-bg-strong);
+    transform: translateX(-3px);
+}
+
+.notif-card.unread {
+    border-right: 4px solid #10b981;
+}
+
+.notif-card .notif-icon-large {
+    width: 55px;
+    height: 55px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.6rem;
+    flex-shrink: 0;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.notif-card .notif-body {
+    flex: 1;
+    min-width: 0;
+}
+
+.notif-card .notif-title {
+    color: #fff;
+    font-weight: 700;
+    font-size: 1rem;
+    margin-bottom: 0.25rem;
+}
+
+.notif-card .notif-message {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.88rem;
+    line-height: 1.55;
+    margin-bottom: 0.5rem;
+}
+
+.notif-card .notif-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.notif-card .notif-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    align-self: flex-start;
+}
+
+.notif-filter-tab {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+    padding: 0.55rem 1.1rem;
+    color: rgba(255, 255, 255, 0.85);
+    font-weight: 600;
+    font-size: 0.88rem;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.notif-filter-tab:hover {
+    background: rgba(255, 255, 255, 0.15);
+    color: #fff;
+}
+
+.notif-filter-tab.active {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: #fff;
+    border-color: transparent;
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+}
+
+
+
+
+
+
+/* ============================================
+   Mobile Optimizations
+   ============================================ */
+
+/* جلوگیری از زوم ناخواسته در iOS */
+input, select, textarea {
+    font-size: 16px;
+}
+
+/* بهبود لمس‌پذیری */
+button, .btn, a {
+    -webkit-tap-highlight-color: rgba(16, 185, 129, 0.2);
+}
+
+/* ============================================
+   Bottom Navigation (Mobile Only)
+   ============================================ */
+
+.mobile-bottom-nav {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background: rgba(15, 23, 42, 0.92);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    padding: 0.5rem 0 0.65rem;
+    padding-bottom: calc(0.65rem + env(safe-area-inset-bottom, 0));
+}
+
+.mobile-bottom-nav-inner {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.mobile-nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    padding: 0.4rem 0.75rem;
+    border-radius: 12px;
+    text-decoration: none;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.68rem;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    position: relative;
+    min-width: 60px;
+}
+
+.mobile-nav-item i {
+    font-size: 1.35rem;
+}
+
+.mobile-nav-item:hover,
+.mobile-nav-item.active {
+    color: #10b981;
+}
+
+.mobile-nav-item.active::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 24px;
+    height: 3px;
+    background: #10b981;
+    border-radius: 0 0 3px 3px;
+}
+
+.mobile-nav-badge {
+    position: absolute;
+    top: 2px;
+    right: 8px;
+    min-width: 16px;
+    height: 16px;
+    padding: 0 4px;
+    background: #ef4444;
+    color: #fff;
+    font-size: 0.6rem;
+    font-weight: 700;
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@media (max-width: 768px) {
+    .mobile-bottom-nav {
+        display: block;
+    }
+
+    /* فضای اضافی پایین برای bottom nav */
+    body {
+        padding-bottom: 80px;
+    }
+
+    /* مخفی کردن navbar بالا در موبایل */
+    .glass-navbar .navbar-collapse {
+        background: rgba(15, 23, 42, 0.98);
+        backdrop-filter: blur(25px);
+        border-radius: 0 0 20px 20px;
+        padding: 1rem;
+        margin-top: 0.5rem;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    /* هدر صفحات کوچک‌تر */
+    .page-title {
+        font-size: 1.35rem;
+    }
+
+    .page-subtitle {
+        font-size: 0.85rem;
+    }
+
+    /* کارت‌ها با padding کمتر */
+    .glass-card {
+        padding: 1.15rem;
+        border-radius: 16px;
+    }
+
+    /* جدول‌های پاسخگو */
+    .table-responsive {
+        font-size: 0.82rem;
+    }
+
+    /* چارت‌ها کوچک‌تر */
+    .chart-container {
+        height: 220px;
+    }
+
+    /* Notification dropdown در موبایل */
+    .notification-menu {
+        position: fixed !important;
+        top: 60px !important;
+        left: 10px !important;
+        right: 10px !important;
+        width: auto !important;
+        max-width: none !important;
+    }
+}
+
+/* ============================================
+   Touch-friendly buttons (min 44px)
+   ============================================ */
+
+@media (max-width: 768px) {
+    .btn {
+        min-height: 42px;
+        padding: 0.55rem 1rem;
+    }
+
+    .btn-sm {
+        min-height: 36px;
+        padding: 0.35rem 0.75rem;
+    }
+
+    /* فاصله‌گذاری بهتر بین المان‌ها */
+    .d-flex.gap-1 { gap: 0.4rem !important; }
+    .d-flex.gap-2 { gap: 0.6rem !important; }
+    .d-flex.gap-3 { gap: 0.85rem !important; }
+
+    /* Grid 2 ستونی روی موبایل برای کارت‌های کوچک */
+    .plant-card .plant-image,
+    .plant-card .plant-placeholder {
+        height: 130px;
+    }
+
+    .plant-card .plant-body {
+        padding: 0.9rem;
+    }
+
+    .plant-card .plant-name {
+        font-size: 0.95rem;
+    }
+
+    .plant-card .plant-scientific {
+        font-size: 0.72rem;
+    }
+
+    /* مخفی کردن دکمه‌های اضافی */
+    .hide-mobile {
+        display: none !important;
+    }
+}
+
+/* ============================================
+   Tablet
+   ============================================ */
+
+@media (min-width: 769px) and (max-width: 1024px) {
+    .mobile-bottom-nav {
+        display: none;
+    }
+
+    .stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+/* ============================================
+   PWA-like improvements
+   ============================================ */
+
+/* حذف hover effect روی لمس */
+@media (hover: none) {
+    .plant-card:hover,
+    .glass-card:hover,
+    .stat-card:hover {
+        transform: none;
+    }
+}
+
+/* انیمیشن smooth برای صفحه‌ها */
+html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+}
+
+/* Pull to refresh رنگ */
+body {
+    overscroll-behavior-y: contain;
+}
