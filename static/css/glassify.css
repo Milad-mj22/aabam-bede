@@ -405,7 +405,7 @@ body::after {
 .page-subtitle {
     color: rgba(255, 255, 255, 0.85);
     font-size: 0.95rem;
-    margin-top: -1rem;
+    margin-top: 1rem;
     margin-bottom: 1.5rem;
 }
 
@@ -1284,7 +1284,7 @@ button, .btn, a {
     }
 
     .page-subtitle {
-        font-size: 0.85rem;
+        font-size: 1rem;
     }
 
     /* کارت‌ها با padding کمتر */

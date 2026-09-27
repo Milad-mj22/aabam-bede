@@ -18,7 +18,7 @@ class User(AbstractUser):
     status = models.CharField(
         max_length=20,
         choices=Status.choices,
-        default=Status.ACTIVE
+        default=Status.PENDING
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -28,5 +28,4 @@ class User(AbstractUser):
 
     @property
     def is_active_user(self):
-        return True
         return self.status == self.Status.ACTIVE

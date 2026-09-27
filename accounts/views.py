@@ -23,7 +23,7 @@ class RegisterView(CreateView):
             user.status = User.Status.ACTIVE
             messages.success(self.request, 'ثبت‌نام با موفقیت انجام شد. وارد شوید.')
         else:
-            user.status = User.Status.PENDING
+            user.status = User.Status.ACTIVE
             messages.info(
                 self.request,
                 'ثبت‌نام انجام شد. حساب شما در انتظار تأیید مدیر است.'
